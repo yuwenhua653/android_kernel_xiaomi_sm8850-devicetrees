@@ -643,15 +643,18 @@
 		"0", "atl", "wls_batt_para_atl",
 		"0", "coslight", "wls_batt_para_cos";
 
-	/* temp_low, temp_high, low_hys, high_hys, max_curr, normal_para, ffc_para, normal_stage, ffc_stage */
+	/* Native MCA: temp bounds, hysteresis, max current, normal/FFC FV,
+	 * normal/FFC voltage tables and normal/FFC stage tables.
+	 * FV values equal the final voltage in each existing voltage table.
+	 */
 	wls_batt_para_atl =
-		"-65535", "13", "0", "0", "0", "null", "null", "null", "null",
-		"13", "18", "0", "2", "4374", "normal_para_atl_13_18", "null", "null", "null",
-		"18", "23", "0", "1", "12400", "normal_para_atl_18_23", "ffc_para_atl_18_23", "null", "ffc_stage_atl_18_23",
-		"23", "35", "0", "0", "17600", "normal_para_atl_23_35", "ffc_para_atl_23_35", "null", "ffc_stage_atl_23_35",
-		"35", "40", "1", "0", "17600", "normal_para_atl_35_40", "ffc_para_atl_35_40", "null", "ffc_stage_atl_35_40",
-		"40", "48", "1", "0", "17600", "normal_para_atl_40_48", "ffc_para_atl_40_48", "null", "ffc_stage_atl_40_48",
-		"48", "65535", "2", "0", "0", "null", "null", "null", "null";
+		"-65535", "13", "0", "0", "0", "0", "0", "null", "null", "null", "null",
+		"13", "18", "0", "2", "4374", "4520", "0", "normal_para_atl_13_18", "null", "null", "null",
+		"18", "23", "0", "1", "12400", "4500", "4550", "normal_para_atl_18_23", "ffc_para_atl_18_23", "null", "ffc_stage_atl_18_23",
+		"23", "35", "0", "0", "17600", "4500", "4550", "normal_para_atl_23_35", "ffc_para_atl_23_35", "null", "ffc_stage_atl_23_35",
+		"35", "40", "1", "0", "17600", "4490", "4550", "normal_para_atl_35_40", "ffc_para_atl_35_40", "null", "ffc_stage_atl_35_40",
+		"40", "48", "1", "0", "17600", "4480", "4540", "normal_para_atl_40_48", "ffc_para_atl_40_48", "null", "ffc_stage_atl_40_48",
+		"48", "65535", "2", "0", "0", "0", "0", "null", "null", "null", "null";
 
 	normal_para_atl_13_18 =
 		"4200", "4374", "2916",
@@ -702,13 +705,13 @@
 	ffc_stage_atl_40_48 = <0 1 0 0 0 0 0 0>;
 
 	wls_batt_para_cos =
-		"-65535", "13", "0", "0", "0", "null", "null", "null", "null",
-		"13", "18", "0", "2", "4386", "normal_para_cos_13_18", "null", "null", "null",
-		"18", "23", "0", "1", "12400", "normal_para_cos_18_23", "ffc_para_cos_18_23", "null", "ffc_stage_cos_18_23",
-		"23", "35", "0", "0", "17600", "normal_para_cos_23_35", "ffc_para_cos_23_35", "null", "ffc_stage_cos_23_35",
-		"35", "40", "1", "0", "17600", "normal_para_cos_35_40", "ffc_para_cos_35_40", "null", "ffc_stage_cos_35_40",
-		"40", "48", "1", "0", "17600", "normal_para_cos_40_48", "ffc_para_cos_40_48", "null", "ffc_stage_cos_40_48",
-		"48", "65535", "2", "0", "0", "null", "null", "null", "null";
+		"-65535", "13", "0", "0", "0", "0", "0", "null", "null", "null", "null",
+		"13", "18", "0", "2", "4386", "4520", "0", "normal_para_cos_13_18", "null", "null", "null",
+		"18", "23", "0", "1", "12400", "4500", "4550", "normal_para_cos_18_23", "ffc_para_cos_18_23", "null", "ffc_stage_cos_18_23",
+		"23", "35", "0", "0", "17600", "4500", "4550", "normal_para_cos_23_35", "ffc_para_cos_23_35", "null", "ffc_stage_cos_23_35",
+		"35", "40", "1", "0", "17600", "4490", "4550", "normal_para_cos_35_40", "ffc_para_cos_35_40", "null", "ffc_stage_cos_35_40",
+		"40", "48", "1", "0", "17600", "4480", "4540", "normal_para_cos_40_48", "ffc_para_cos_40_48", "null", "ffc_stage_cos_40_48",
+		"48", "65535", "2", "0", "0", "0", "0", "null", "null", "null", "null";
 
 	normal_para_cos_13_18 =
 		"4200", "4386", "2924",
@@ -772,16 +775,17 @@
 };
 
 &mca_quick_wireless_batt_para_gbl {
+	/* Native 11-column schema; FV follows the existing terminal voltage. */
 	batt_para = "0", "atl", "wls_batt_para_atl";
 
 	wls_batt_para_atl =
-		"-65535", "13", "0", "0", "0", "null", "null", "null", "null",
-		"13", "18", "0", "2", "7500", "normal_para_13_18", "null", "null", "null",
-		"18", "23", "0", "1", "12500", "normal_para_18_23", "null", "null", "null",
-		"23", "35", "0", "0", "17600", "normal_para_23_35", "ffc_para_23_35", "null", "ffc_stage_23_35",
-		"35", "40", "1", "0", "17600", "normal_para_35_40", "ffc_para_35_40", "null", "ffc_stage_35_40",
-		"40", "48", "1", "0", "17600", "normal_para_40_48", "ffc_para_40_48", "null", "ffc_stage_40_48",
-		"48", "65535", "0", "0", "0", "null", "null", "null", "null";
+		"-65535", "13", "0", "0", "0", "0", "0", "null", "null", "null", "null",
+		"13", "18", "0", "2", "7500", "4500", "0", "normal_para_13_18", "null", "null", "null",
+		"18", "23", "0", "1", "12500", "4500", "0", "normal_para_18_23", "null", "null", "null",
+		"23", "35", "0", "0", "17600", "4480", "4550", "normal_para_23_35", "ffc_para_23_35", "null", "ffc_stage_23_35",
+		"35", "40", "1", "0", "17600", "4470", "4510", "normal_para_35_40", "ffc_para_35_40", "null", "ffc_stage_35_40",
+		"40", "48", "1", "0", "17600", "4460", "4510", "normal_para_40_48", "ffc_para_40_48", "null", "ffc_stage_40_48",
+		"48", "65535", "0", "0", "0", "0", "0", "null", "null", "null", "null";
 
 	normal_para_13_18 = "4200", "7500", "6250", "4500", "6250", "800";
 	normal_para_18_23 = "4200", "12500", "9375", "4500", "9375", "800";

@@ -16,3 +16,6 @@
 	qcom,board-id = <8 0>;
 	xiaomi,miboard-id = <0x4 0>;
 };
+
+/* Native generic PSCI optional-consumer policy. */
+#include "myron-native-idle.dtsi"

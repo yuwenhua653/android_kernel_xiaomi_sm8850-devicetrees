@@ -1,0 +1,80 @@
+// SPDX-License-Identifier: BSD-3-Clause
+/* Myron native ACK profile: generic PSCI/menu/TEO, no vendor LPM policy,
+ * CoreSight links/sinks, or QPT framework. Keep real CPU/cluster domains.
+ * These optional consumers had no driver in the reviewed running config.
+ * Absolute targets intentionally fail overlay application if absent.
+ */
+
+&{/soc/funnel@1d02b000} { status = "disabled"; };
+
+&{/soc/tmc@1d028000} { status = "disabled"; };
+
+&{/soc/replicator@1d02a000} { status = "disabled"; };
+
+&{/soc/replicator@1d090000} { status = "disabled"; };
+
+&{/soc/replicator@1d0a0000} { status = "disabled"; };
+
+&{/soc/replicator@1d0b0000} { status = "disabled"; };
+
+&{/soc/replicator@1d0c0000} { status = "disabled"; };
+
+&{/soc/replicator@1d0d0000} { status = "disabled"; };
+
+&{/soc/replicator@1d0e0000} { status = "disabled"; };
+
+&{/soc/funnel@1d081000} { status = "disabled"; };
+
+&{/soc/funnel@1d021000} { status = "disabled"; };
+
+&{/soc/tmc@1d029000} { status = "disabled"; };
+
+&{/soc/funnel@1d12b000} { status = "disabled"; };
+
+&{/soc/tmc@1d128000} { status = "disabled"; };
+
+&{/soc/replicator@1d12a000} { status = "disabled"; };
+
+&{/soc/replicator@1d190000} { status = "disabled"; };
+
+&{/soc/replicator@1d1a0000} { status = "disabled"; };
+
+&{/soc/funnel@1d181000} { status = "disabled"; };
+
+&{/soc/funnel@1d121000} { status = "disabled"; };
+
+&{/soc/tmc@1d129000} { status = "disabled"; };
+
+&{/soc/cluster-device0} { status = "disabled"; };
+
+&{/soc/cluster-device1} { status = "disabled"; };
+
+&{/soc/cluster-device2} { status = "disabled"; };
+
+&{/soc/arbiter@c400000/spmi@c426000/pmk8850@0/qcom,power-telemetry-device} { status = "disabled"; };
+
+&{/} { xiaomi,native-idle-profile = "generic-psci-v2"; };
+
+&{/soc/tmc@10048000} { status = "disabled"; };
+
+&{/soc/tmc@1004f000} { status = "disabled"; };
+
+&{/soc/tpda@11004000} { status = "disabled"; };
+
+&{/soc/funnel@11005000} { status = "disabled"; };
+
+&{/soc/funnel@1100c000} { status = "disabled"; };
+
+&{/soc/funnel@1100d000} { status = "disabled"; };
+
+&{/soc/tn@11100000} { status = "disabled"; };
+
+&{/soc/funnel@1114c000} { status = "disabled"; };
+
+&{/soc/tpda@11188000} { status = "disabled"; };
+
+&{/soc/funnel@11304000} { status = "disabled"; };
+
+&{/soc/tmc@11305000} { status = "disabled"; };
+
+&{/soc/tn@11500000} { status = "disabled"; };
