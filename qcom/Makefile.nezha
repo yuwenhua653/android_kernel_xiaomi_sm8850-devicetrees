@@ -7,3 +7,9 @@ dtb-y += whale.dtb whalep.dtb
 
 # Input and NFC components. Final stock overlays also contain other subsystems.
 dtb-y += nezha-sg-whale-input-overlay.dtbo nezha-canoe-input-overlay.dtbo
+
+# The raw Canoe trees need the SoC display nodes before board overlays.
+dtb-y += display/display/canoe-sde.dtbo
+ifneq ($(wildcard $(src)/nezha-os4-display.generated.dtsi),)
+dtb-y += nezha-canoe-board-overlay.dtbo
+endif

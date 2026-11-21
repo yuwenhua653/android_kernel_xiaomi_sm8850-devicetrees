@@ -1,0 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/* Use the same board identifiers and input wiring as the Canoe input target. */
+#include "nezha-canoe-input-overlay.dtso"
+#include "nezha-os4-display.generated.dtsi"
