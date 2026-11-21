@@ -79,7 +79,7 @@
 
 		qcom,mdss-dsi-display-timings {
 			timing@wqhd_normal_120hz_index_00 {
-				#include "p1-42-0d-0b-p21-dsc-cmd-timing-common.dtsi"
+				#include "dsi-panel-p1-42-0d-0b-p21-dsc-cmd-common.dtsi"
 				qcom,mdss-dsi-on-command = [
 					15 00 00 40 00 00 02 03 01 15 00 00 40 00 00 02
 					35 00 15 00 00 40 00 00 02 53 20 39 00 00 40 00
@@ -462,7 +462,7 @@
 			};
 
 			timing@wqhd_normal_60hz_index_01 {
-				#include "p1-42-0d-0b-p21-dsc-cmd-timing-common.dtsi"
+				#include "dsi-panel-p1-42-0d-0b-p21-dsc-cmd-common.dtsi"
 				qcom,mdss-dsi-on-command = [
 					15 00 00 40 00 00 02 03 01 15 00 00 40 00 00 02
 					35 00 15 00 00 40 00 00 02 53 20 39 00 00 40 00
@@ -849,7 +849,7 @@
 			};
 
 			timing@wqhd_normal_90hz_index_02 {
-				#include "p1-42-0d-0b-p21-dsc-cmd-timing-common.dtsi"
+				#include "dsi-panel-p1-42-0d-0b-p21-dsc-cmd-common.dtsi"
 				qcom,mdss-dsi-on-command = [
 					15 00 00 40 00 00 02 03 01 15 00 00 40 00 00 02
 					35 00 15 00 00 40 00 00 02 53 20 39 00 00 40 00
@@ -1236,7 +1236,7 @@
 			};
 
 			timing@wqhd_normal_30hz_index_03 {
-				#include "p1-42-0d-0b-p21-dsc-cmd-timing-common.dtsi"
+				#include "dsi-panel-p1-42-0d-0b-p21-dsc-cmd-common.dtsi"
 				qcom,mdss-dsi-on-command = [
 					15 00 00 40 00 00 02 03 01 15 00 00 40 00 00 02
 					35 00 15 00 00 40 00 00 02 53 20 39 00 00 40 00
@@ -1623,7 +1623,7 @@
 			};
 
 			timing@wqhd_normal_24hz_index_04 {
-				#include "p1-42-0d-0b-p21-dsc-cmd-timing-common.dtsi"
+				#include "dsi-panel-p1-42-0d-0b-p21-dsc-cmd-common.dtsi"
 				qcom,mdss-dsi-on-command = [
 					15 00 00 40 00 00 02 03 01 15 00 00 40 00 00 02
 					35 00 15 00 00 40 00 00 02 53 20 39 00 00 40 00
@@ -2010,7 +2010,7 @@
 			};
 
 			timing@wqhd_idle_120_to_10hz_index_05 {
-				#include "p1-42-0d-0b-p21-dsc-cmd-timing-common.dtsi"
+				#include "dsi-panel-p1-42-0d-0b-p21-dsc-cmd-common.dtsi"
 				qcom,mdss-dsi-on-command = [
 					15 00 00 40 00 00 02 03 01 15 00 00 40 00 00 02
 					35 00 15 00 00 40 00 00 02 53 20 39 00 00 40 00
@@ -2400,7 +2400,7 @@
 			};
 
 			timing@wqhd_idle_120_to_1hz_index_06 {
-				#include "p1-42-0d-0b-p21-dsc-cmd-timing-common.dtsi"
+				#include "dsi-panel-p1-42-0d-0b-p21-dsc-cmd-common.dtsi"
 				qcom,mdss-dsi-on-command = [
 					15 00 00 40 00 00 02 03 01 15 00 00 40 00 00 02
 					35 00 15 00 00 40 00 00 02 53 20 39 00 00 40 00
@@ -2790,7 +2790,7 @@
 			};
 
 			timing@wqhd_auto_60_to_1hz_index_7 {
-				#include "p1-42-0d-0b-p21-dsc-cmd-timing-common.dtsi"
+				#include "dsi-panel-p1-42-0d-0b-p21-dsc-cmd-common.dtsi"
 				qcom,mdss-dsi-on-command = [
 					15 00 00 40 00 00 02 03 01 15 00 00 40 00 00 02
 					35 00 15 00 00 40 00 00 02 53 20 39 00 00 40 00
@@ -3180,7 +3180,7 @@
 			};
 
 			timing@wqhd_auto_120_to_1hz_index_8 {
-				#include "p1-42-0d-0b-p21-dsc-cmd-timing-common.dtsi"
+				#include "dsi-panel-p1-42-0d-0b-p21-dsc-cmd-common.dtsi"
 				qcom,mdss-dsi-on-command = [
 					15 00 00 40 00 00 02 03 01 15 00 00 40 00 00 02
 					35 00 15 00 00 40 00 00 02 53 20 39 00 00 40 00
@@ -3570,7 +3570,7 @@
 			};
 
 			timing@wqhd_qsync_120_to_10hz_index_9 {
-				#include "p1-42-0d-0b-p21-dsc-cmd-timing-common.dtsi"
+				#include "dsi-panel-p1-42-0d-0b-p21-dsc-cmd-common.dtsi"
 				qcom,mdss-dsi-on-command = [
 					15 00 00 40 00 00 02 03 01 15 00 00 40 00 00 02
 					35 00 15 00 00 40 00 00 02 53 20 39 00 00 40 00
