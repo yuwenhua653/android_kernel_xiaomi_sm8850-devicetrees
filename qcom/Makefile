@@ -2,6 +2,8 @@
 
 ifeq ($(CONFIG_TARGET_PRODUCT_MYRON),y)
 include $(src)/Makefile.myron
+else ifeq ($(CONFIG_TARGET_PRODUCT_NEZHA),y)
+include $(src)/Makefile.nezha
 else
 # SPDX-License-Identifier: GPL-2.0
 

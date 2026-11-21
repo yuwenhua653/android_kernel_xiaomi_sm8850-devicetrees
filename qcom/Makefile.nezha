@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: GPL-2.0-only
+# Base list in the OS4.0.7.0.XPACNXM vendor_boot DTB section order.
+dtb-y += canoe-tp-v2.dtb canoe-tp.dtb canoe-v2.dtb canoe.dtb
+dtb-y += canoep-sg-v2.dtb canoep-sg.dtb
+dtb-y += canoep-tp-v2.dtb canoep-tp.dtb canoep-v2.dtb canoep.dtb
+dtb-y += whale.dtb whalep.dtb
+
+# Input and NFC components. Final stock overlays also contain other subsystems.
+dtb-y += nezha-sg-whale-input-overlay.dtbo nezha-canoe-input-overlay.dtbo

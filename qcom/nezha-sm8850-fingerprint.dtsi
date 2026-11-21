@@ -1,0 +1,47 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Xiaomi 17 Ultra (nezha), OS4.0.7.0.XPACNXM board wiring.
+
+&tlmm {
+	fingerprint_irq_default: fingerprint_irq_default {
+		mux {
+			pins = "gpio99";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio99";
+			drive-strength = <2>;
+			bias-pull-down;
+		};
+	};
+};
+
+&soc {
+	xiaomi_fingerprint {
+		compatible = "xiaomi,xiaomi-fp";
+		xiaomi,gpio_irq = <&tlmm 99 0>;
+		xiaomi,gpio_ipc = <&tlmm 99 0>;
+		xiaomi,vendor_names = "P1_n2_132_431";
+		intr2-pin-enable;
+		intr2-side-config = "TIC";
+		intr2-default-electrical = <1 1>;
+		fp_3v3_vreg-supply = <&L9B>;
+		fp_1v8_vreg-supply = <&L10B>;
+		netlink-event = <25>;
+		pinctrl-names = "irq_default";
+		pinctrl-0 = <&fingerprint_irq_default>;
+		status = "ok";
+	};
+};
+
+&L9B {
+	regulator-min-microvolt = <3300000>;
+	regulator-max-microvolt = <3300000>;
+	qcom,init-voltage = <3300000>;
+};
+
+&L10B {
+	regulator-min-microvolt = <1800000>;
+	regulator-max-microvolt = <1800000>;
+	qcom,init-voltage = <1800000>;
+};

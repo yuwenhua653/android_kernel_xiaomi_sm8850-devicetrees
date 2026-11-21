@@ -1,0 +1,89 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Xiaomi 17 Ultra (nezha), OS4.0.7.0.XPACNXM board wiring.
+
+&tlmm {
+	nfc {
+		nfc_int_active: nfc_int_active {
+			mux {
+				pins = "gpio75";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio75";
+				drive-strength = <2>;
+				bias-pull-down;
+			};
+		};
+
+		nfc_int_suspend: nfc_int_suspend {
+			mux {
+				pins = "gpio75";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio75";
+				drive-strength = <2>;
+				bias-pull-down;
+			};
+		};
+
+		nfc_enable_active: nfc_enable_active {
+			mux {
+				pins = "gpio34", "gpio35";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio34", "gpio35";
+				drive-strength = <2>;
+				bias-disable;
+			};
+		};
+
+		nfc_enable_suspend: nfc_enable_suspend {
+			mux {
+				pins = "gpio34", "gpio35";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio34", "gpio35";
+				drive-strength = <2>;
+				bias-disable;
+			};
+		};
+	};
+};
+
+&soc {
+	st54spi_gpio {
+		status = "ok";
+		compatible = "st,st54spi_gpio";
+		gpio-power_nreset = <&tlmm 46 0>;
+	};
+};
+
+&qupv3_se21_i2c {
+	status = "ok";
+	qcom,clk-freq-out = <0xf4240>;
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	st21nfc: st21nfc@08 {
+		compatible = "st,st21nfc";
+		reg = <8>;
+		irq-gpios = <&tlmm 75 0>;
+		reset-gpios = <&tlmm 34 0>;
+		clkreq-gpios = <&tlmm 35 0>;
+		interrupt-parent = <&tlmm>;
+		interrupts = <75 0>;
+		interrupt-names = "nfc_irq";
+		pinctrl-names = "nfc_active", "nfc_suspend";
+		pinctrl-0 = <&nfc_int_active>,
+			<&nfc_enable_active>;
+		pinctrl-1 = <&nfc_int_suspend>,
+			<&nfc_enable_suspend>;
+	};
+};
