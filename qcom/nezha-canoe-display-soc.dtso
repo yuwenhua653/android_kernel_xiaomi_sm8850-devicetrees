@@ -1,0 +1,16 @@
+// SPDX-License-Identifier: GPL-2.0-only
+#include "display/display/canoe-sde.dts"
+
+/* Nezha uses the host display path on this OS4 base. */
+&msm_hfi_core {
+	status = "disabled";
+};
+
+/* Keep the two additional unsecure IOVA reservations from the Nezha base. */
+&smmu_sde_iommu_region_partition {
+	iommu-addresses = <&smmu_sde_unsec 0 0x0        0 0x20000>,
+			  <&smmu_sde_unsec 0 0xfc800000 0 0x2b00000>,
+			  <&smmu_sde_unsec 0 0x200000   0 0x1e000>,
+			  <&smmu_sde_unsec 0 0x1415000  0 0x1000>,
+			  <&smmu_sde_sec   0 0x0        0 0x20000>;
+};
