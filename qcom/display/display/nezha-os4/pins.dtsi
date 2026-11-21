@@ -1,0 +1,303 @@
+/* Xiaomi 17 Ultra panel configuration, OS4.0.7.0.XPACNXM. */
+
+/* PMIC and TLMM pin states used by the DSI supplies and reset lines. */
+
+&spmi0_bus {
+	pmh0110_d: pmh0110@3 {
+		compatible = "qcom,spmi-pmic";
+		reg = <3 0>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		pmh0110_d_gpios: pinctrl@8800 {
+			compatible = "qcom,pmh0110-gpio";
+			reg = <34816>;
+			gpio-controller;
+			#gpio-cells = <2>;
+			interrupt-controller;
+			#interrupt-cells = <2>;
+
+			sde_mdp_vsync_p_1p2_active: sde-mdp-vsync-p-1p2-active-state {
+				power-source = <2>;
+				output-enable;
+				input-disable;
+				function = "paired";
+				pins = "gpio9";
+			};
+
+			sde_mdp_vsync_p_1p8_active: sde-mdp-vsync-p-1p8-active-state {
+				power-source = <1>;
+				output-disable;
+				input-enable;
+				function = "paired";
+				pins = "gpio10";
+			};
+		};
+	};
+
+	pmh0110_f: pmh0110@5 {
+		compatible = "qcom,spmi-pmic";
+		reg = <5 0>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		pmh0110_f_gpios: pinctrl@8800 {
+			compatible = "qcom,pmh0110-gpio";
+			reg = <34816>;
+			gpio-controller;
+			#gpio-cells = <2>;
+			interrupt-controller;
+			#interrupt-cells = <2>;
+
+			sde_disp0_rst_1p2_active: sde-disp0-rst-1p2-active-state {
+				power-source = <2>;
+				output-disable;
+				input-enable;
+				function = "paired";
+				pins = "gpio9";
+			};
+
+			sde_disp0_rst_1p8_active: sde-disp0-rst-1p8-active-state {
+				power-source = <1>;
+				output-enable;
+				input-disable;
+				function = "paired";
+				pins = "gpio10";
+			};
+		};
+	};
+};
+
+&spmi1_bus {
+	qcom,pmd802x@4 {
+		compatible = "qcom,spmi-pmic";
+		reg = <4 0>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		pmd802x_gpios: pinctrl@8800 {
+			compatible = "qcom,pmd802x-gpio";
+			reg = <34816>;
+			gpio-controller;
+			#gpio-cells = <2>;
+			interrupt-controller;
+			#interrupt-cells = <2>;
+
+			sde_disp0_vdd_active: sde_disp0_vdd_active {
+				qcom,drive-strength = <2>;
+				power-source = <2>;
+				bias-disable;
+				output-enable;
+				input-disable;
+				function = "normal";
+				pins = "gpio2";
+			};
+		};
+	};
+
+	pmh0104@9 {
+		compatible = "qcom,spmi-pmic";
+		reg = <9 0>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		pmh0104_gpios: pinctrl@8800 {
+			compatible = "qcom,pmh0104-gpio";
+			reg = <34816>;
+			gpio-controller;
+			#gpio-cells = <2>;
+			interrupt-controller;
+			#interrupt-cells = <2>;
+		};
+	};
+};
+
+&tlmm {
+	pmx_sde: pmx_sde {
+		sde_dsi_active: sde_dsi_active {
+			mux: mux {
+				function = "gpio";
+				pins = "gpio98";
+			};
+
+			config: config {
+				bias-disable = <0>;
+				drive-strength = <8>;
+				pins = "gpio98";
+			};
+		};
+
+		sde_dsi_suspend: sde_dsi_suspend {
+			mux_298: mux {
+				function = "gpio";
+				pins = "gpio98";
+			};
+
+			config_299: config {
+				bias-pull-down;
+				drive-strength = <2>;
+				pins = "gpio98";
+			};
+		};
+
+		sde_dsi1_active: sde_dsi1_active {
+			mux_300: mux {
+				function = "gpio";
+				pins = "gpio97";
+			};
+
+			config_301: config {
+				bias-disable = <0>;
+				drive-strength = <8>;
+				pins = "gpio97";
+			};
+		};
+
+		sde_dsi1_suspend: sde_dsi1_suspend {
+			mux_302: mux {
+				function = "gpio";
+				pins = "gpio97";
+			};
+
+			config_303: config {
+				bias-pull-down;
+				drive-strength = <2>;
+				pins = "gpio97";
+			};
+		};
+	};
+
+	pmx_sde_te: pmx_sde_te {
+		sde_te_active: sde_te_active {
+			mux_304: mux {
+				function = "mdp_vsync";
+				pins = "gpio86";
+			};
+
+			config_305: config {
+				bias-pull-down;
+				drive-strength = <2>;
+				pins = "gpio86";
+			};
+		};
+
+		sde_te_suspend: sde_te_suspend {
+			mux_306: mux {
+				function = "mdp_vsync";
+				pins = "gpio86";
+			};
+
+			config_307: config {
+				bias-pull-down;
+				drive-strength = <2>;
+				pins = "gpio86";
+			};
+		};
+
+		sde_te_function0: sde_te_function0 {
+			mux {
+				function = "gpio";
+				pins = "gpio86";
+			};
+
+			config {
+				bias-pull-down;
+				drive-strength = <2>;
+				pins = "gpio86";
+			};
+		};
+
+		sde_te1_active: sde_te1_active {
+			mux_308: mux {
+				function = "mdp_vsync";
+				pins = "gpio87";
+			};
+
+			config_309: config {
+				bias-pull-down;
+				drive-strength = <2>;
+				pins = "gpio87";
+			};
+		};
+
+		sde_te1_suspend: sde_te1_suspend {
+			mux_310: mux {
+				function = "mdp_vsync";
+				pins = "gpio87";
+			};
+
+			config_311: config {
+				bias-pull-down;
+				drive-strength = <2>;
+				pins = "gpio87";
+			};
+		};
+
+		sde_te1_function0: sde_te1_function0 {
+			mux {
+				function = "gpio";
+				pins = "gpio87";
+			};
+
+			config {
+				bias-pull-down;
+				drive-strength = <2>;
+				pins = "gpio87";
+			};
+		};
+	};
+
+	pmx_sde_esync: pmx_sde_esync {
+		sde_esync0_active: sde_esync0_active {
+			mux_312: mux {
+				function = "mdp_esync0_out";
+				pins = "gpio88";
+			};
+
+			config_313: config {
+				bias-pull-down;
+				drive-strength = <2>;
+				pins = "gpio88";
+			};
+		};
+
+		sde_esync0_suspend: sde_esync0_suspend {
+			mux_314: mux {
+				function = "mdp_esync0_out";
+				pins = "gpio88";
+			};
+
+			config_315: config {
+				bias-pull-down;
+				drive-strength = <2>;
+				pins = "gpio88";
+			};
+		};
+
+		sde_esync1_active: sde_esync1_active {
+			mux_316: mux {
+				function = "mdp_esync1_out";
+				pins = "gpio100";
+			};
+
+			config_317: config {
+				bias-pull-down;
+				drive-strength = <2>;
+				pins = "gpio100";
+			};
+		};
+
+		sde_esync1_suspend: sde_esync1_suspend {
+			mux_318: mux {
+				function = "mdp_esync1_out";
+				pins = "gpio100";
+			};
+
+			config_319: config {
+				bias-pull-down;
+				drive-strength = <2>;
+				pins = "gpio100";
+			};
+		};
+	};
+};

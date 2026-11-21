@@ -1,0 +1,35 @@
+/* Xiaomi 17 Ultra panel configuration, OS4.0.7.0.XPACNXM. */
+qcom,panel-roi-alignment = <540 40 540 40 1080 40>;
+qcom,partial-update-enabled = "single_roi";
+qcom,default-topology-index = <0>;
+qcom,display-topology = <2 2 1>;
+qcom,mdss-dsc-block-prediction-enable;
+qcom,mdss-dsc-bit-per-pixel = <8>;
+qcom,mdss-dsc-bit-per-component = <8>;
+qcom,mdss-dsc-slice-per-pkt = <1>;
+qcom,mdss-dsc-slice-width = <540>;
+qcom,mdss-dsc-slice-height = <40>;
+qcom,mdss-dsc-rc-override_v1;
+qcom,compression-mode = "dsc";
+qcom,mdss-dsi-h-sync-pulse = <0>;
+qcom,mdss-dsi-timing-switch-command-state = "dsi_lp_mode";
+qcom,mdss-dsi-off-command-state = "dsi_hs_mode";
+qcom,mdss-dsi-on-command-state = "dsi_lp_mode";
+qcom,mdss-dsi-off-command = [
+	05 01 00 00 14 00 02 28 00 05 01 00 00 78 00 02
+	10 00
+];
+qcom,mdss-dsi-panel-jitter = <4 1>;
+qcom,mdss-dsi-v-bottom-border = <0>;
+qcom,mdss-dsi-v-top-border = <0>;
+qcom,mdss-dsi-h-right-border = <0>;
+qcom,mdss-dsi-h-left-border = <0>;
+qcom,mdss-dsi-v-pulse-width = <2>;
+qcom,mdss-dsi-v-front-porch = <20>;
+qcom,mdss-dsi-v-back-porch = <18>;
+qcom,mdss-dsi-h-sync-skew = <0>;
+qcom,mdss-dsi-h-pulse-width = <4>;
+qcom,mdss-dsi-h-back-porch = <20>;
+qcom,mdss-dsi-h-front-porch = <20>;
+qcom,mdss-dsi-panel-height = <2400>;
+qcom,mdss-dsi-panel-width = <1080>;

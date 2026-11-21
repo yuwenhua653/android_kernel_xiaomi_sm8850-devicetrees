@@ -11,6 +11,4 @@ dtb-y += nezha-sg-whale-input-overlay.dtbo nezha-canoe-input-overlay.dtbo
 # SoC display and its HFI / fence suppliers for the matching raw Canoe bases.
 dtb-y += mm/hfi_core/canoe-hfi-core.dtbo mm/hw_fence/canoe-hw-fence.dtbo
 dtb-y += synx/synx/canoe-synx.dtbo nezha-canoe-display-soc.dtbo
-ifneq ($(wildcard $(src)/nezha-os4-display.generated.dtsi),)
 dtb-y += nezha-canoe-board-overlay.dtbo
-endif
