@@ -23,6 +23,11 @@
 		max_power = <90>;
 	};
 
+	mca_qcom_pd_protocol: mca_qcom_pd_protocol {
+		compatible = "mca,adsp_pd_protocol";
+		status = "ok";
+	};
+
 	mca_protocol_qc_class: mca_protocol_qc_class {
 		compatible = "mca,protocol_qc";
 		status = "ok";
@@ -41,4 +46,8 @@
 		loadsw-num = <1>;
 		loadsw-dir-list = "loadsw_master";
 	};
+};
+
+&mca_adsp_glink {
+	status = "ok";
 };
