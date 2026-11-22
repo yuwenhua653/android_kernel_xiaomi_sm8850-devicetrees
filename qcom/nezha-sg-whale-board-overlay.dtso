@@ -1,0 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-only
+#include "nezha-sg-whale-input-overlay.dtso"
+#include "nezha-sm8850-regulator.dtsi"
+#include "nezha-charger-common.dtsi"

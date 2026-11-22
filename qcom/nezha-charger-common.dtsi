@@ -1,0 +1,44 @@
+// SPDX-License-Identifier: GPL-2.0-only
+
+&soc {
+	mca_panel: mca_panel {
+		compatible = "mca,mca_panel";
+		status = "ok";
+	};
+
+	mca_bc12_class: mca_bc12_class {
+		compatible = "mca,bc12_class";
+		status = "ok";
+	};
+
+	mca_protocol_core: mca_protocol_core {
+		compatible = "mca,protocol_core";
+		status = "ok";
+	};
+
+	mca_protocol_pd_class: mca_protocol_pd_class {
+		compatible = "mca,protocol_pd";
+		status = "ok";
+		support_mode = <4>;
+		max_power = <90>;
+	};
+
+	mca_protocol_qc_class: mca_protocol_qc_class {
+		compatible = "mca,protocol_qc";
+		status = "ok";
+	};
+
+	mca_platform_cp: mca_platform_cp {
+		compatible = "mca,platform_cp";
+		status = "ok";
+		cp-num = <1>;
+		cp-dir-list = "cp_master";
+	};
+
+	mca_platform_loadsw: mca_platform_loadsw {
+		compatible = "mca,platform_loadsw";
+		status = "disabled";
+		loadsw-num = <1>;
+		loadsw-dir-list = "loadsw_master";
+	};
+};

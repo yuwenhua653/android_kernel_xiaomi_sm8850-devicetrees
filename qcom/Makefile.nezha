@@ -12,3 +12,4 @@ dtb-y += nezha-sg-whale-input-overlay.dtbo nezha-canoe-input-overlay.dtbo
 dtb-y += mm/hfi_core/canoe-hfi-core.dtbo mm/hw_fence/canoe-hw-fence.dtbo
 dtb-y += synx/synx/canoe-synx.dtbo nezha-canoe-display-soc.dtbo
 dtb-y += nezha-canoe-board-overlay.dtbo
+dtb-y += nezha-sg-whale-board-overlay.dtbo
