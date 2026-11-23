@@ -51,3 +51,15 @@
 &mca_adsp_glink {
 	status = "ok";
 };
+
+&qupv3_se5_i2c {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+	fuel-gauge@55 {
+		compatible = "ti,bq27z561";
+		reg = <0x55>;
+		label = "battery";
+	};
+};
