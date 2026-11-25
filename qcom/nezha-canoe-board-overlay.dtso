@@ -4,3 +4,5 @@
 #include "display/display/nezha-sde-display.dtsi"
 #include "nezha-sm8850-regulator.dtsi"
 #include "nezha-charger-common.dtsi"
+
+#include "nezha-sm8850-dxs702.dtsi"

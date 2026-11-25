@@ -2,3 +2,26 @@
 #include "nezha-sg-whale-input-overlay.dtso"
 #include "nezha-sm8850-regulator.dtsi"
 #include "nezha-charger-common.dtsi"
+
+&spmi0_bus {
+	#address-cells = <2>;
+	#size-cells = <0>;
+
+	pmh0110@3 {
+		compatible = "qcom,spmi-pmic";
+		reg = <3 0>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		pmh0110_d_gpios: pinctrl@8800 {
+			compatible = "qcom,pmh0110-gpio";
+			reg = <0x8800>;
+			gpio-controller;
+			#gpio-cells = <2>;
+			interrupt-controller;
+			#interrupt-cells = <2>;
+		};
+	};
+};
+
+#include "nezha-sm8850-dxs702.dtsi"
