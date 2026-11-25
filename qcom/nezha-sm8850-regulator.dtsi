@@ -51,6 +51,7 @@
 
 	et5907mv_pm: etek,ldo@35 {
 		compatible = "etek,et5907mv";
+		status = "disabled";
 		reg = <0x35>;
 		index = <0>;
 		pinctrl-names = "et5907mv_enable", "et5907mv_disable";
@@ -130,6 +131,7 @@
 
 	hl7603_pm: halo,ldo@55 {
 		compatible = "tiantong,dcdc";
+		status = "disabled";
 		reg = <0x55>;
 		index = <0>;
 		pinctrl-names = "hl7603_enable", "hl7603_disable";

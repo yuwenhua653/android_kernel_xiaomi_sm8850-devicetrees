@@ -102,6 +102,13 @@
 };
 
 &pmh0110_d_gpios {
+	/* Apply the stock SIM routing even when the satellite modem is off. */
+	pinctrl-names = "default";
+	pinctrl-0 = <&pmh0110_d_gpio5_dig_out_default
+		     &pmh0110_d_gpio6_dig_out_default
+		     &pmh0110_d_gpio7_dig_out_default
+		     &pmh0110_d_gpio8_dig_out_default>;
+
 	pmh0110_d_gpio9_dig_out {
 		pmh0110_d_gpio9_dig_out_default: pmh0110_d_gpio9_dig_out_default {
 			pins = "gpio9";
@@ -159,6 +166,11 @@
 };
 
 &pmh0110_i_gpios {
+	/* Apply the stock SIM routing even when the satellite modem is off. */
+	pinctrl-names = "default";
+	pinctrl-0 = <&pmh0110_i_gpio13_dig_out_default
+		     &pmh0110_i_gpio14_dig_out_default>;
+
 	pmh0110_i_gpio13_dig_out {
 		pmh0110_i_gpio13_dig_out_default: pmh0110_i_gpio13_dig_out_default {
 			pins = "gpio13";
@@ -239,6 +251,7 @@
 &soc {
 	tiantong_mdm {
 		compatible = "mdm,gpio-tiantong-dxs702";
+		status = "disabled";
 		interrupt-parent = <&tlmm>;
 		interrupts = <88 0 172 0>;
 		debounce-time = <30>;
@@ -283,12 +296,6 @@
 			     &satellite_dxs702_rst_ctl
 			     &pmh0101_gpio13_dig_out_default
 			     &pmh0101_gpio15_dig_out_default
-			     &pmh0110_d_gpio9_dig_out_default
-			     &pmh0110_d_gpio5_dig_out_default
-			     &pmh0110_d_gpio6_dig_out_default
-			     &pmh0110_d_gpio7_dig_out_default
-			     &pmh0110_d_gpio8_dig_out_default
-			     &pmh0110_i_gpio13_dig_out_default
-			     &pmh0110_i_gpio14_dig_out_default>;
+			     &pmh0110_d_gpio9_dig_out_default>;
 	};
 };
