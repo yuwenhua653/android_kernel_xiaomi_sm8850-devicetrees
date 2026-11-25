@@ -6,3 +6,4 @@
 #include "nezha-charger-common.dtsi"
 
 #include "nezha-sm8850-dxs702.dtsi"
+#include "nezha-sm8850-tof.dtsi"

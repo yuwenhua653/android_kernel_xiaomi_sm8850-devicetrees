@@ -1,0 +1,96 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/* Nezha camera ranging sensor on SE14 chip select 0. */
+
+&tlmm {
+	mi_se14_spi_miso_active: mi_se14_spi_miso_active {
+		mux {
+			pins = "gpio8";
+			function = "qup3_se1_l0";
+		};
+		config {
+			pins = "gpio8";
+			drive-strength = <6>;
+			bias-disable;
+		};
+	};
+
+	mi_se14_spi_mosi_active: mi_se14_spi_mosi_active {
+		mux {
+			pins = "gpio9";
+			function = "qup3_se1_l1";
+		};
+		config {
+			pins = "gpio9";
+			drive-strength = <6>;
+			bias-disable;
+		};
+	};
+
+	mi_se14_spi_clk_active: mi_se14_spi_clk_active {
+		mux {
+			pins = "gpio10";
+			function = "qup3_se1_l2";
+		};
+		config {
+			pins = "gpio10";
+			drive-strength = <6>;
+			bias-disable;
+		};
+	};
+
+	mi_tof_se14_spi_cs_active: mi_tof_se14_spi_cs_active {
+		mux {
+			pins = "gpio11";
+			function = "qup3_se1_l3";
+		};
+		config {
+			pins = "gpio11";
+			drive-strength = <6>;
+			bias-pull-down;
+		};
+	};
+
+	mi_qupv3_se14_spi_sleep: mi_qupv3_se14_spi_sleep {
+		mux {
+			pins = "gpio8", "gpio9", "gpio10";
+			function = "gpio";
+		};
+		config {
+			pins = "gpio8", "gpio9", "gpio10";
+			drive-strength = <2>;
+			bias-pull-down;
+		};
+	};
+
+	mi_qupv3_se14_spi_cs_sleep: mi_qupv3_se14_spi_cs_sleep {
+		mux {
+			pins = "gpio11";
+			function = "gpio";
+		};
+		config {
+			pins = "gpio11";
+			drive-strength = <2>;
+			bias-pull-up;
+		};
+	};
+};
+
+&qupv3_se14_spi {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+	pinctrl-0 = <&mi_se14_spi_miso_active &mi_se14_spi_mosi_active
+		     &mi_se14_spi_clk_active &mi_tof_se14_spi_cs_active>;
+	pinctrl-1 = <&mi_qupv3_se14_spi_sleep &mi_qupv3_se14_spi_cs_sleep>;
+
+	stmvl53l5@0 {
+		compatible = "st,stmvl53l5";
+		reg = <0>;
+		spi-max-frequency = <3000000>;
+		_1P8_power-supply = <&pmh0110_f_l1>;
+		_3P0_power-supply = <&pmh0101_l16>;
+		_1P2_power-supply = <&pmh0101_l18>;
+		stm,l5_firmware_name = "stmvl53l5.bin";
+		stm,l8_firmware_name = "stmvl53l8.bin";
+	};
+};

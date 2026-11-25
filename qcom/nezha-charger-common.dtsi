@@ -52,6 +52,34 @@
 	status = "ok";
 };
 
+&tlmm {
+	charger_cp_nlpm_default: charger_cp_nlpm_default {
+		mux {
+			pins = "gpio114";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio114";
+			drive-strength = <2>;
+			bias-disable;
+		};
+	};
+
+	charger_cp_int_default: charger_cp_int_default {
+		mux {
+			pins = "gpio209";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio209";
+			drive-strength = <2>;
+			bias-disable;
+		};
+	};
+};
+
 &qupv3_se5_i2c {
 	#address-cells = <1>;
 	#size-cells = <0>;
@@ -61,5 +89,24 @@
 		compatible = "ti,bq27z561";
 		reg = <0x55>;
 		label = "battery";
+	};
+
+	sc8585_master@6e {
+		compatible = "sc8585_master";
+		reg = <0x6e>;
+		ic_role = <0>;
+		cp-int = <&tlmm 209 0>;
+		cp-nlpm-gpio = <&tlmm 114 0>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&charger_cp_nlpm_default &charger_cp_int_default>;
+		bat-ovp-threshold = <4700>;
+		bat-ovp-alarm-threshold = <4650>;
+		bus-ovp-threshold = <21000 12000 6000>;
+		usb-ovp-threshold = <21000 14000 7500>;
+		bus-ocp-threshold = <5000 5600 5000>;
+		wpc-ovp-threshold = <21000>;
+		out-ovp-threshold = <5000>;
+		pmid2-uvp-threshold = <350 350 100>;
+		pmid2-ovp-threshold = <600>;
 	};
 };
