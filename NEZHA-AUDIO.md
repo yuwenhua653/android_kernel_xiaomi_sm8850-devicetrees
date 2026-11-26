@@ -27,9 +27,12 @@ resolving phandles. Later stock fragments take precedence. It rejects an
 unmerged overlay as a final DTB. The second checks enabled nodes and ancestors;
 it still reports missing charge-interface and wireless-receiver groups.
 
-Audio/haptic nodes are not a runtime qualification. TAS25xx driver is still
-absent from this port; the reviewed MiCode audio songyuan release
-`922ff4070f803d8f7d1122b268fe0b2cd5d262c4` does not supply it. Kernel Nezha
+Audio/haptic nodes are not a runtime qualification. The modules repository now
+ports the public TI/Google TAS25xx driver and connects both Primary TDM directions
+to `tas25xx ASI1` by OF reference. See its
+`qcom/opensource/audio-kernel/NEZHA-TAS25XX.md` for pinned source, firmware hash,
+parser tests and limits. The reviewed MiCode audio songyuan release
+`922ff4070f803d8f7d1122b268fe0b2cd5d262c4` does not itself supply that driver. Kernel Nezha
 haptic custom/calibration voltages and F0 fallback are separately integrated;
 other OEM controls remain outside this change. Speakers, microphones, call
 routing, BT audio, haptic HAL and suspend require device acceptance tests.
