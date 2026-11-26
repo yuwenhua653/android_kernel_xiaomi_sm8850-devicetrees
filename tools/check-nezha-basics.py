@@ -37,6 +37,16 @@ REQUIRED = {
         "csi": ("qcom,csiphy",),
         "sensor": ("qcom,cam-sensor", "qcom,cam-i2c-sensor"),
     },
+    "audio": {
+        "sound_card": ("qcom,canoe-asoc-snd",),
+        "codec": ("qcom,wcd939x-codec",),
+        "amplifier": ("ti,tas25xx",),
+        "bluetooth_swr": ("qcom,btfmswr_slave",),
+    },
+    "haptics": {
+        "controller": ("qcom,hv-haptics",),
+        "soundwire": ("qcom,pmih010x-swr-haptics",),
+    },
     "modem": {
         "remoteproc": ("qcom,canoe-modem-pas", "qcom,whale-modem-pas"),
     },

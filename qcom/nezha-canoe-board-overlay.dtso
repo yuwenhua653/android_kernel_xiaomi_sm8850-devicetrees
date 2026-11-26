@@ -15,3 +15,5 @@
 #include <dt-bindings/regulator/qcom,rpmh-regulator-levels.h>
 #include "camera/canoe-camera.dtsi"
 #include "nezha-canoe-camera.dtsi"
+
+#include "nezha-canoe-audio.dtsi"
