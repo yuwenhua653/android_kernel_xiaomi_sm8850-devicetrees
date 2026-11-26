@@ -8,3 +8,10 @@
 #include "nezha-sm8850-dxs702.dtsi"
 #include "nezha-sm8850-tof.dtsi"
 #include "nezha-canoe-connectivity.dtsi"
+#include <dt-bindings/clock/qcom,gcc-canoe.h>
+#include <dt-bindings/clock/qcom,camcc-canoe.h>
+#include <dt-bindings/interconnect/qcom,canoe.h>
+#include <dt-bindings/interrupt-controller/arm-gic.h>
+#include <dt-bindings/regulator/qcom,rpmh-regulator-levels.h>
+#include "camera/canoe-camera.dtsi"
+#include "nezha-canoe-camera.dtsi"

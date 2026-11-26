@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: GPL-2.0-only
 
 &soc {
+	mca_qcom_subpmic_proxy: mca_qcom_subpmic_proxy {
+		compatible = "mca,qcom_subpmic";
+		status = "okay";
+	};
+
 	mca_panel: mca_panel {
 		compatible = "mca,mca_panel";
 		status = "ok";
