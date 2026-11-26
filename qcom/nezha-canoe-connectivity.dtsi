@@ -1,0 +1,316 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/* Xiaomi 17 Ultra, OS4.0.7.0.XPACNXM Canoe board connectivity.
+ * Source: DTBO entry 1, fragment 9 and fragments 262-276 (excluding 274).
+ * PMIC GPIO and NVMEM suppliers are from fragments 0 and 1.
+ * bt_uwb_en is the factory shared reset state; it is needed by Bluetooth.
+ */
+
+&pcie {
+	power-domains = <&gcc 1>;
+	power-domain-names = "gdsc-phy-vdd";
+};
+
+&spmi0_bus {
+	pmk8850@0 {
+		sdam@7100 {
+			compatible = "qcom,spmi-sdam";
+			reg = <28928>;
+			#address-cells = <1>;
+			#size-cells = <1>;
+			xo_calib_data: xo_calib-data@59 {
+				reg = <89 1>;
+			};
+			fmd_set: fmd-set@9a {
+				reg = <154 1>;
+			};
+			fmd_chg_pon: fmd-chg-pon@9f {
+				reg = <159 1>;
+			};
+			fmd_cnt2_stop: fmd-cnt2-stop@a2 {
+				reg = <162 1>;
+			};
+		};
+	};
+};
+
+&pmh0104_gpios {
+	bt_en: bt_en {
+		power-source = <1>;
+		bias-disable;
+		output-enable;
+		input-disable;
+		function = "normal";
+		pins = "gpio5";
+	};
+	bt_uwb_en: bt_uwb_en {
+		power-source = <1>;
+		bias-disable;
+		output-enable;
+		input-disable;
+		function = "normal";
+		pins = "gpio5";
+	};
+	bt_fmd_clk_en: bt_fmd_clk_en {
+		power-source = <1>;
+		bias-disable;
+		output-disable;
+		input-enable;
+		function = "normal";
+		pins = "gpio6";
+	};
+};
+
+&tlmm {
+	cnss_pins {
+		cnss_wlan_en_active: cnss_wlan_en_active {
+			mux {
+				function = "gpio";
+				pins = "gpio16";
+			};
+			config {
+				bias-pull-up;
+				output-high;
+				drive-strength = <16>;
+				pins = "gpio16";
+			};
+		};
+		cnss_wlan_en_sleep: cnss_wlan_en_sleep {
+			mux {
+				function = "gpio";
+				pins = "gpio16";
+			};
+			config {
+				bias-pull-down;
+				output-low;
+				drive-strength = <2>;
+				pins = "gpio16";
+			};
+		};
+		cnss_wlan_sw_ctrl: cnss_wlan_sw_ctrl {
+			mux {
+				function = "wcn_sw_ctrl";
+				pins = "gpio18";
+			};
+		};
+		cnss_wlan_sw_ctrl_wl_cx: cnss_wlan_sw_ctrl_wl_cx {
+			mux {
+				function = "wcn_sw";
+				pins = "gpio19";
+			};
+		};
+		cnss_host_sol_default: cnss_host_sol_default {
+			mux {
+				function = "gpio";
+				pins = "gpio204";
+			};
+			config {
+				bias-pull-down;
+				drive-strength = <4>;
+				pins = "gpio204";
+			};
+		};
+	};
+};
+
+&reserved_memory {
+	cnss_wlan_mem: cnss_wlan_region {
+		size = <0 33554432>;
+		alignment = <0 4194304>;
+		reusable;
+		alloc-ranges = <0 0 0 0xffffffff>;
+		compatible = "shared-dma-pool";
+	};
+};
+
+&soc {
+	wlan_peach: qcom,cnss-peach@b0000000 {
+		clock-names = "rf_clk";
+		clocks = <&rpmhcc 6>;
+		wcal-pbs-supply = <&WCAL_PBS>;
+		nvmem-cell-names = "xo_calib_reg";
+		nvmem-cells = <&xo_calib_data>;
+		wlan-txrx-intr-cpumask = <3 48>;
+		qcom,pdc_mode_vote_table = " {class: wlan_pdc, ss: rf, res: L3K1.m, enable: 1}", " {class: wlan_pdc, ss: rf, res: L3K1.m, dwnval: 2}";
+		qcom,pmu_vreg_map = "VDDD_AON_0P9", "S2J1", "VDDA_RFA_0P9", "S2J1", "VDDA_RFA_1P9", "S8F0", "VDDA_RFA_1P3", "S7F0", "VDDD_WLMX_0P9", "S2J1", "VDDD_WLCX_0P9", "S1J1", "VDDD_BTCX_0P9", "S2J1", "VDDD_BTCMX_0P9", "S2J1", "VDDA_PCIE_0P9", "S7F0", "VDDA_PCIE_1P2", "S7F0";
+		qcom,vreg_pdc_map = "S1J1", "bb", "S2J1", "rf", "S7F0", "rf", "S8F0", "rf";
+		qcom,bus-bw-cfg = <0 0 2250 308000 7500 308000 30000 308000>,
+			<100000 308000 175000 3210000 312500 3210000 587500 6450000>,
+			<7500 1610000 0 0 2250 2188800 7500 2188800>,
+			<30000 2188800 100000 2188800 175000 6220800 312500 8368000>,
+			<587500 12800000 7500 2188800>;
+		qcom,bus-bw-cfg-count = <9>;
+		qcom,icc-path-count = <2>;
+		interconnect-names = "pcie_to_memnoc", "memnoc_to_ddr";
+		interconnects = <&pcie_noc 53>,
+			<&pcie_noc 562>,
+			<&gem_noc 30>,
+			<&mc_virt 512>;
+		qcom,vdd-wlan-ant-share-config = <1200000 1200000 25 0 1>;
+		vdd-wlan-ant-share-supply = <&L3K>;
+		qcom,vdd-wlan-rfa2-config = <1328000 1340000 0 0 1>;
+		vdd-wlan-rfa2-supply = <&S7F>;
+		qcom,vdd-wlan-rfa1-config = <1876000 2000000 0 0 1>;
+		vdd-wlan-rfa1-supply = <&S8F>;
+		qcom,vdd-wlan-dig-config = <892000 1000000 0 0 1>;
+		vdd-wlan-dig-supply = <&S2J>;
+		qcom,vdd-wlan-cx-config = <892000 1000000 0 0 1>;
+		vdd-wlan-cx-supply = <&S1J>;
+		qcom,vdd-wlan-io12-config = <1200000 1200000 30000 0 1>;
+		vdd-wlan-io12-supply = <&L3G>;
+		qcom,vdd-wlan-aon-config = <1800000 1800000 30000 0 1>;
+		vdd-wlan-aon-supply = <&L2G>;
+		platform-name-required;
+		msix-match-addr = <12288>;
+		qcom,qmp = <&aoss_qmp>;
+		qcom,same-dt-multi-dev;
+		use-pm-domain;
+		qcom,wlan-cbc-enabled;
+		cnss-enable-self-recovery;
+		qcom,wlan-ramdump-dynamic = <6291456>;
+		qcom,wlan-rc-num = <0>;
+		qcom,wlan;
+		pinctrl-4 = <&cnss_host_sol_default>;
+		pinctrl-3 = <&cnss_wlan_sw_ctrl_wl_cx>;
+		pinctrl-2 = <&cnss_wlan_sw_ctrl>;
+		pinctrl-1 = <&cnss_wlan_en_sleep>;
+		pinctrl-0 = <&cnss_wlan_en_active>;
+		pinctrl-names = "wlan_en_active", "wlan_en_sleep", "sw_ctrl", "sw_ctrl_wl_cx", "sol_default";
+		mpm_wake_set_gpios = <18 19>;
+		wlan-dev-sol-gpio = <&tlmm 205 0>;
+		wlan-host-sol-gpio = <&tlmm 204 0>;
+		qcom,sw-ctrl-gpio = <&tlmm 18 0>;
+		qcom,bt-en-gpio = <&pmh0104_gpios 5 0>;
+		wlan-en-gpio = <&tlmm 16 0>;
+		supported-ids = <4366>;
+		qcom,wlan-sw-ctrl-gpio = <&tlmm 19 0>;
+		reg-names = "smmu_iova_ipa";
+		reg = <0 0xb0000000 0 65536>;
+		compatible = "qcom,cnss-peach";
+	};
+	wlan_direct_link: qcom,cnss-direct-link {
+		dma-coherent;
+		memory-region = <&direct_link_iommu_region_partition>;
+		qcom,iommu-group = <&cnss_audio_iommu_group0>;
+		iommus = <&apps_smmu 4111 0>;
+		#size-cells = <2>;
+		#address-cells = <2>;
+		compatible = "qcom,cnss-direct-link";
+		direct_link_iommu_region_partition: direct_link_iommu_region_partition {
+			iommu-addresses = <&wlan_direct_link 0 0 0 0x18000000>,
+				<&wlan_direct_link 0 0xb0000000 0 0x50000000>;
+		};
+	};
+	wlan_vendor_wonder: qcom,cnss-vendor-wlan-wonder {
+		status = "okay";
+		compatible = "qcom,cnss-vendor-wlan-wonder";
+	};
+};
+
+&pcie_rp {
+	#size-cells = <2>;
+	#address-cells = <3>;
+	cnss_pci0: cnss_pci0 {
+		memory-region = <&cnss_wlan_mem>,
+			<&cnss_pci0_iommu_region_partition>;
+		qcom,iommu-group = <&cnss_audio_iommu_group0>;
+		reg = <0 0 0 0 0>;
+		cnss_pci0_iommu_region_partition: cnss_pci0_iommu_region_partition {
+			iommu-addresses = <&cnss_pci0 0 0 0 0 0x18000000>,
+				<&cnss_pci0 0 0 0xb0000000 0 0x50000000>;
+		};
+	};
+};
+
+&tlmm {
+	cnss_bt_sw_ctrl: cnss_wlan_sw_ctrl {
+		mux {
+			function = "wcn_sw_ctrl";
+			pins = "gpio18";
+		};
+	};
+};
+
+&soc {
+	wcn786x {
+		qcom,pdc_init_table = "{class: wlan_pdc, ss: rf, res: S2J1.m, enable: 1}", "{class: wlan_pdc, ss: rf, res: S2J1.v, enable: 1}", "{class: wlan_pdc, ss: rf, res: S2J1.v, upval: 876}", "{class: wlan_pdc, ss: rf, res: S2J1.v, dwnval: 876}";
+		qcom,bt-vdd-wlan-aon-config = <892000 1000000 0 0 1>;
+		qcom,bt-vdd-wlan-aon-supply = <&S1J>;
+		qcom,bt-vdd-rfa1p25-config = <1328000 1340000 0 1 0>;
+		qcom,bt-vdd-rfa1p8-config = <1876000 2000000 0 1 0>;
+		qcom,bt-vdd-rfa0p75-config = <892000 1036000 0 1 0>;
+		qcom,bt-vdd-dig-config = <892000 1036000 0 1 1>;
+		qcom,bt-vdd-aon-config = <892000 1036000 0 1 0>;
+		qcom,bt-ant-ldo-config = <1800000 1860000 0 1 0>;
+		qcom,bt-vdd12-io-config = <1200000 1200000 30000 1 1>;
+		qcom,bt-vdd18-aon-config = <1800000 1800000 30000 1 1>;
+		qcom,bt-vdd-rfa1p25-supply = <&S7F>;
+		qcom,bt-vdd-rfa1p8-supply = <&S8F>;
+		qcom,bt-vdd-rfa0p75-supply = <&S2J>;
+		qcom,bt-vdd-aon-supply = <&S2J>;
+		qcom,bt-vdd-dig-supply = <&S2J>;
+		qcom,bt-ant-ldo-supply = <&L6K>;
+		qcom,bt-vdd12-io-supply = <&L3G>;
+		qcom,bt-vdd18-aon-supply = <&L2G>;
+		qcom,qmp = <&aoss_qmp>;
+		qcom,bt-reset-gpio = <&pmh0104_gpios 5 0>;
+		qcom,bt-fmd-clk-gpio = <&pmh0104_gpios 6 0>;
+		qcom,bt-sw-ctrl-gpio = <&tlmm 18 0>;
+		qcom,wl-reset-gpio = <&tlmm 16 0>;
+		mpm_wake_set_gpios = <18 9>;
+		pinctrl-2 = <&bt_fmd_clk_en>;
+		pinctrl-1 = <&cnss_bt_sw_ctrl>;
+		pinctrl-0 = <&bt_en>;
+		pinctrl-names = "bt_en", "sw_ctrl", "bt_fmd_clk_en";
+		qcom,wcn786x;
+		clock-names = "bt_rf_clk1";
+		clocks = <&rpmhcc 6>;
+		nvmem-cell-names = "fmd_set", "fmd_chg_pon", "fmd_cnt2_stop";
+		nvmem-cells = <&fmd_set>,
+			<&fmd_chg_pon>,
+			<&fmd_cnt2_stop>;
+		compatible = "qcom,wcn786x";
+	};
+	bt_peach {
+		qcom,pdc_init_table = "{class: wlan_pdc, ss: rf, res: S2J1.m, enable: 1}", "{class: wlan_pdc, ss: rf, res: S2J1.v, enable: 1}", "{class: wlan_pdc, ss: rf, res: S2J1.v, upval: 876}", "{class: wlan_pdc, ss: rf, res: S2J1.v, dwnval: 876}";
+		qcom,bt-vdd-wlan-aon-config = <892000 1000000 0 0 1>;
+		qcom,bt-vdd-wlan-aon-supply = <&S1J>;
+		qcom,bt-vdd-rfa1p25-config = <1328000 1340000 0 1 0>;
+		qcom,bt-vdd-rfa1p8-config = <1876000 2000000 0 1 0>;
+		qcom,bt-vdd-rfa0p75-config = <892000 1036000 0 1 0>;
+		qcom,bt-vdd-dig-config = <892000 1036000 0 1 1>;
+		qcom,bt-vdd-aon-config = <892000 1036000 0 1 0>;
+		qcom,bt-ant-ldo-config = <1800000 1860000 0 1 0>;
+		qcom,bt-vdd12-io-config = <1200000 1200000 30000 1 1>;
+		qcom,bt-vdd18-aon-config = <1800000 1800000 30000 1 1>;
+		qcom,bt-vdd-rfa1p25-supply = <&S7F>;
+		qcom,bt-vdd-rfa1p8-supply = <&S8F>;
+		qcom,bt-vdd-rfa0p75-supply = <&S2J>;
+		qcom,bt-vdd-aon-supply = <&S2J>;
+		qcom,bt-vdd-dig-supply = <&S2J>;
+		qcom,bt-ant-ldo-supply = <&L6K>;
+		qcom,bt-vdd12-io-supply = <&L3G>;
+		qcom,bt-vdd18-aon-supply = <&L2G>;
+		qcom,qmp = <&aoss_qmp>;
+		qcom,bt-reset-gpio = <&pmh0104_gpios 5 0>;
+		qcom,bt-fmd-clk-gpio = <&pmh0104_gpios 6 0>;
+		qcom,bt-sw-ctrl-gpio = <&tlmm 18 0>;
+		qcom,wl-reset-gpio = <&tlmm 16 0>;
+		mpm_wake_set_gpios = <18 9>;
+		pinctrl-2 = <&bt_fmd_clk_en>;
+		pinctrl-1 = <&cnss_bt_sw_ctrl>;
+		pinctrl-0 = <&bt_uwb_en>;
+		pinctrl-names = "bt_uwb_en", "sw_ctrl", "bt_fmd_clk_en";
+		qcom,peach-bt;
+		clock-names = "bt_rf_clk1";
+		clocks = <&rpmhcc 6>;
+		nvmem-cell-names = "fmd_set", "fmd_chg_pon", "fmd_cnt2_stop";
+		nvmem-cells = <&fmd_set>,
+			<&fmd_chg_pon>,
+			<&fmd_cnt2_stop>;
+		compatible = "qcom,peach-bt";
+	};
+};
+
+&qupv3_se18_4uart {
+	status = "ok";
+};
