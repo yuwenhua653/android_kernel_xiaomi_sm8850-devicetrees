@@ -1,6 +1,12 @@
 // SPDX-License-Identifier: GPL-2.0-only
 
 &soc {
+	mca_fg_psy: fuel-gauge-bridge {
+		compatible = "xiaomi,nezha-fg-psy";
+		power-supplies = <&nezha_fuel_gauge>;
+		status = "okay";
+	};
+
 	mca_qcom_subpmic_proxy: mca_qcom_subpmic_proxy {
 		compatible = "mca,qcom_subpmic";
 		status = "okay";
@@ -90,7 +96,7 @@
 	#size-cells = <0>;
 	status = "okay";
 
-	fuel-gauge@55 {
+	nezha_fuel_gauge: fuel-gauge@55 {
 		compatible = "ti,bq27z561";
 		reg = <0x55>;
 		label = "battery";
