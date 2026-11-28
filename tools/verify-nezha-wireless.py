@@ -66,6 +66,20 @@ def verify(final, factory):
             require(final[node] == factory[stock + "/" + child], node)
 
 
+def verify_jeita(final, factory):
+    root = one(final, "mca,buckchg_jeita")
+    stock = one(factory, "mca,buckchg_jeita")
+    gauge = one(final, "ti,bq27z561")
+    require(not enabled(final, root), "JEITA requires the complete policy")
+    require("xiaomi,report-cell-manufacturer" in final[gauge], "missing cell identification")
+    require(final[root]["xiaomi,cell-supply"] == final[gauge]["phandle"], "JEITA gauge phandle")
+    skip = {"phandle", "status", "xiaomi,cell-supply"}
+    for suffix in ("", "_second_para", "_gbl_para"):
+        got = {k: v for k, v in final[root + suffix].items() if k not in skip}
+        expected = {k: v for k, v in factory[stock + suffix].items() if k not in skip}
+        require(got == expected, "JEITA factory profile mismatch " + (suffix or "primary"))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("dtbo_image", type=Path)
@@ -87,7 +101,8 @@ def main():
         soc = tuple(cells(final["/"]["qcom,msm-id"]))
         require(soc in entries, f"{path.name} has no matching factory entry")
         verify(final, entries[soc])
-        print(f"PASS {path.name} receiver, Hall, FOD, wireless class and GLINK owner")
+        verify_jeita(final, entries[soc])
+        print(f"PASS {path.name} receiver, Hall, FOD, wireless class, GLINK owner and three JEITA profiles")
 
 
 if __name__ == "__main__":

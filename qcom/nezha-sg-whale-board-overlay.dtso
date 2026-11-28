@@ -3,7 +3,6 @@
 #include "nezha-sm8850-regulator.dtsi"
 #include "nezha-charger-common.dtsi"
 #include "audio/canoe-audio.dtsi"
-#include "audio/canoe-lpi.dtsi"
 
 /* The smaller OS4 board entry uses the PMIH010x default waveforms and
  * PMK8850 SDAM46 for its haptic calibration.
@@ -21,6 +20,33 @@
 	#address-cells = <2>;
 	#size-cells = <0>;
 	#include "pmih010x.dtsi"
+};
+
+&pmih010x_gpios {
+	pinctrl-0 = <&display_therm_default>, <&charger_therm_default>;
+	pinctrl-names = "default";
+
+	display_therm_default: display_therm-default-state {
+		pins = "gpio18";
+		function = "normal";
+		bias-high-impedance;
+	};
+
+	charger_therm_default: charger_therm-default-state {
+		pins = "gpio12";
+		function = "normal";
+		bias-high-impedance;
+	};
+
+	anti_burn_mos_ctrl {
+		anti_burn_mos_ctrl_default: anti_burn_mos_ctrl_default {
+			pins = "gpio7";
+			function = "normal";
+			output-enable;
+			//drive-strength = <2>;
+			power-source = <0>;
+		};
+	};
 };
 
 &pmih010x_haptics {

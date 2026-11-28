@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 
 #include "nezha-sc96281.dtsi"
+#include "nezha-jeita.dtsi"
 
 &soc {
 	mca_charge_interface: mca_charge_interface {
@@ -154,6 +155,7 @@
 
 	nezha_fuel_gauge: fuel-gauge@55 {
 		compatible = "ti,bq27z561";
+		xiaomi,report-cell-manufacturer;
 		reg = <0x55>;
 		label = "battery";
 	};

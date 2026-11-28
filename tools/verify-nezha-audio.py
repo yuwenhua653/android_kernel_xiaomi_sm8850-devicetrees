@@ -78,6 +78,10 @@ def main():
             if ref['/']['qcom,msm-id'] != tree['/']['qcom,msm-id']:
                 raise ValueError(f'{path}: factory SoC ID mismatch')
             actual = sg_properties(tree)
+            for subtree in ('/soc/spf_core_platform', '/soc/arbiter@c400000/spmi@c437000/qcom,pmih010x@7'):
+                paths = lambda n: {p for p in n if p == subtree or p.startswith(subtree + '/')}
+                if paths(tree) != paths(ref):
+                    raise ValueError(f'{path}: SG node set differs under {subtree}')
             for key in actual.keys() | expected.keys():
                 if expected.get(key) != actual.get(key):
                     raise ValueError(f'{path}: SG audio/haptic mismatch at {key}')
