@@ -1,0 +1,7 @@
+// SPDX-License-Identifier: GPL-2.0-only
+#include "display/display/canoe-sde.dts"
+
+/* Both Whale SoC revisions use the Alor display clock provider in OS4. */
+&dispcc {
+	compatible = "qcom,alor-dispcc", "syscon";
+};

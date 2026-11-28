@@ -18,6 +18,9 @@ SPECIFIERS = {
 PHANDLES = {
     "remote-endpoint", "operating-points-v2", "interrupt-parent", "memory-region",
     "nvmem-cells", "nvmem", "msi-parent", "extcon", "qcom,wcd_usbss", "trip",
+    "qcom,disp_crm-crmc", "qcom,dp-aux-switch", "qcom,dp-pll", "qcom,ext-disp",
+    "connectors", "qcom,dsi-default-panel", "qcom,dsi-phy", "qcom,dsi-ctrl", "qcom,panel-supply-entries",
+    "usb-controller", "soccp_controller", "pll_codes_region", "qcom,mdp", "qcom,sde-soccp-controller",
     "usb-repeater", "qcom,iommu-group", "cpu", "cpus", "cpu-idle-states", "next-level-cache", "shared-ice-cfg",
 }
 # Optional IP blocks must have the same path set, including their absence.
@@ -27,6 +30,10 @@ GROUPS = {
                   "qcom,pmk8350-rtc", "qcom,regulator-ocp-notifier"),
     "USB": ("qcom,ucsi-glink", "usb-c-connector", "qcom,pmic-eusb2-repeater"),
     "GPU": ("qcom,kgsl-3d0", "qcom,kgsl-smmu-v2"),
+    "display": ("qcom,sde-kms", "qcom,dp-display", "qcom,msm-hw-fence", "qcom,msm-hdcp",
+                "qcom,sde-cesta", "qcom,dp-pll-3nm-v1", "qcom,smmu_sde_sec", "qcom,smmu_sde_unsec",
+                "qcom,dsi-ctrl-hw-v2.10", "qcom,dsi-phy-v7.2", "qcom,ipclite", "qcom,msm-ext-disp",
+                "qcom,msm-ext-disp-audio-codec-rx", "qcom,dsi-display"),
     "IPA": ("qcom,ipa", "qcom,rmnet-ipa3", "qcom,smem_mailbox"),
     "DSP": ("qcom,fastrpc",),
     "video": ("qcom,canoe-vidc", "qcom,canoe-vidc-v2", "qcom,canoe-vidc-v3", "qcom,msm-cvp", "qcom,msm-mmrm"),
@@ -35,7 +42,16 @@ GROUPS = {
     "IR": ("ir-spi",),
     "ToF": ("st,stmvl53l5",),
 }
+# The China Canoe board contains these ten panels. Its factory SoC base also
+# contains unrelated reference panels, including simulation targets.
+CANOE_PANELS = (
+    "dsi_nt37801_amoled_fhd_plus_cmd",
+    "dsi_p1_42_02_0a_dsc_cmd", "dsi_p1_42_02_0a_p10_dsc_cmd", "dsi_p1_42_02_0a_p11_dsc_cmd",
+    "dsi_p1_42_0d_0b_dsc_cmd", "dsi_p1_42_0d_0b_p10_dsc_cmd", "dsi_p1_42_0d_0b_p11_dsc_cmd",
+    "dsi_p1_42_0d_0b_p12_dsc_cmd", "dsi_p1_42_0d_0b_p2_dsc_cmd", "dsi_p1_42_0d_0b_p21_dsc_cmd",
+)
 LABELS = {
+    "display": ("dispcc",),
     "USB": ("usb0", "wcd_usbss", "eusb2_phy0", "usb_qmp_dp_phy"),
     "thermal": ("pmk8850_vadc", "thermal_zones"),
     "IR": ("qupv3_se0_spi_mosi_active", "qupv3_se0_spi_sleep", "ls_gpio_active", "ls_gpio_sleep"),
@@ -71,7 +87,7 @@ class Tree:
         kind = SPECIFIERS.get(key)
         if key.endswith("-gpios"):
             kind = "#gpio-cells"
-        if not (kind or key == "iommu-addresses" or key in PHANDLES or key.endswith("-supply") or
+        if not (kind or key in ("iommu-addresses", "qcom,altmode-dev") or key in PHANDLES or key.endswith("-supply") or
                 (key.startswith("pinctrl-") and key[8:].isdigit())):
             return value
         data = cells(value)
@@ -87,6 +103,8 @@ class Tree:
             if target is None:
                 raise ValueError(f"{path}:{key} has an unresolved phandle at cell {i}")
             count = cells(self.nodes[target][kind])[0] if kind else 0
+            if key == "qcom,altmode-dev":
+                count = 1
             if key == "iommu-addresses":
                 count = sum(self.bus_cells(target, prop) for prop in ("#address-cells", "#size-cells"))
             if i + 1 + count > len(data):
@@ -108,6 +126,13 @@ class Tree:
         roots = {path for compatible in GROUPS[group] for path in self.compat.get(compatible, ())}
         roots.update(self.labels[name] for name in LABELS.get(group, ()))
         paths = {path for root in roots for path in self.nodes if path == root or path.startswith(root + "/")}
+        if group == "display" and self.compat.get("qcom,dsi-display"):
+            board_panels = {self.labels[name] for name in CANOE_PANELS}
+            controller = self.labels["mdss_mdp"]
+            other_panels = {path for path in paths if path.rpartition("/")[0] == controller and
+                            "qcom,mdss-dsi-panel-name" in self.nodes[path] and path not in board_panels}
+            paths = {path for path in paths if not any(path == panel or path.startswith(panel + "/")
+                                                        for panel in other_panels)}
         if group == "ToF":
             paths.update(self.labels[name] for name in ("qupv3_se14_spi", "qupv3_se14_i2c", "i3c3"))
         if group == "IR":
