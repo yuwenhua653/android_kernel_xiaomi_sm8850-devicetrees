@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 
+#include "nezha-sc96281.dtsi"
+
 &soc {
 	mca_charge_interface: mca_charge_interface {
 		compatible = "mca,charge_interface";
@@ -106,6 +108,11 @@
 		loadsw-num = <1>;
 		loadsw-dir-list = "loadsw_master";
 	};
+};
+
+/* Both chargers claim PMIC GLINK owner 0x800a. Nezha uses MCA. */
+&battery_charger {
+	status = "disabled";
 };
 
 &mca_adsp_glink {

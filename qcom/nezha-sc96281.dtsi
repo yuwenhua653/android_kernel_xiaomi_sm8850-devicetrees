@@ -1,0 +1,491 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/* Xiaomi MiCode kernel_devicetree, songyuan-w-oss, 396596c6d1ec.
+ * Nezha receiver and three case calibrations used on both board families.
+ */
+&tlmm {
+	wireless_rx_int_default: wireless_rx_int_default {
+		mux {
+			pins = "gpio69";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio69";
+			drive-strength = <2>;
+			bias-pull-up;
+			input-enable;
+			qcom,apps;
+		};
+	};
+
+	hall_s_int_default: hall_s_int_default {
+		mux {
+			pins = "gpio79";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio79";
+			drive-strength = <2>;
+			bias-disable;
+			input-enable;
+			qcom,apps;
+		};
+	};
+
+	hall_n_int_default: hall_n_int_default {
+		mux {
+			pins = "gpio78";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio78";
+			drive-strength = <2>;
+			bias-disable;
+			input-enable;
+			qcom,apps;
+		};
+	};
+};
+
+&qupv3_se22_i2c {
+	status = "okay";
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	sc96281@33 {
+		compatible = "sc,sc96281-wireless-charger";
+		reg = <0x33>;
+		project_vendor = <4>;
+		support-hall = <1>;
+		rx_role = <0>;
+		fw_version_index = <2>;
+		mca,fod-data = <&mca_sc96281_fod_data>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&wireless_rx_int_default>, <&hall_s_int_default>, <&hall_n_int_default>;
+		rx-int = <&tlmm 69 0x00>;
+		pwr-det-int = <&tlmm 57 0x00>;
+		sleep-rx-gpio = <&tlmm 200 0x00>;
+		hall-s-int = <&tlmm 79 0x00>;
+		hall-n-int = <&tlmm 78 0x00>;
+		should-send-case-status-forward = <1>;
+		should-send-case-status-reverse = <1>;
+	};
+};
+
+&soc {
+	mca_platform_wireless: mca_platform_wireless {
+		compatible = "mca,platform_wireless";
+		wireless-num = <1>;
+		wireless-dir-list = "wireless_master";
+	};
+
+	mca_sc96281_fod_data: mca_sc96281_fod_data {
+		compatible = "mca_sc96281_fod_data";
+
+		fod_params_default =
+			"0", "16", "0x00000000", "params_default", "params_default", "params_default";
+		params_default = /bits/ 8 <
+				155 45 155 30 150 30 149 30 148 30 135 40 135 40 135 40
+				135 40 135 40 135 40 135 40 135 40 135 40 135 40 135 40
+			>;
+
+		fod_params_2_1 =
+			"0", "16", "0x09010305", "params_low_inductance_80w_2_1", "params_low_inductance_80w_2_1_mag", "params_low_inductance_80w_2_1_mag_thick",
+			"0", "16", "0x09010A01", "params_m2_50W_2_1", "params_m2_50W_mag_2_1", "params_m2_50W_mag_thick_2_1";
+
+		params_low_inductance_80w_2_1 = /bits/ 8 <
+				130 20 130 10 130 10 130 10 130 10 130 10 130 10 130 10
+				130 10 130 10 130 10 130 10 131 10 131 10 132 10 132 10
+			>;
+		params_low_inductance_80w_2_1_mag = /bits/ 8 <
+				130 20 130 10 130 10 130 10 130 10 130 10 130 10 130 10
+				130 10 130 10 130 10 130 10 131 10 131 10 132 10 132 10
+			>;
+		params_low_inductance_80w_2_1_mag_thick = /bits/ 8 <
+				130 10 130 6 130 6 130 6 130 10 130 10 130 10 130 10
+				130 10 130 10 130 10 130 10 131 10 132 10 132 10 134 10
+			>;
+
+		params_m2_50W_2_1 = /bits/ 8 <
+				150 50 140 50 140 40 140 30 140 20 140 6 140 6 140 6
+				140 6 135 6 135 6 133 6 130 6 130 6 130 6 130 6
+			>;
+		params_m2_50W_mag_2_1 = /bits/ 8 <
+				150 60 140 60 140 40 140 40 140 20 140 10 140 10 140 6
+				140 6 135 6 135 6 133 6 130 6 130 6 130 6 130 6
+			>;
+		params_m2_50W_mag_thick_2_1 = /bits/ 8 <
+				150 70 140 70 140 60 140 40 140 20 140 20 140 20 140 20
+				135 20 135 20 135 20 133 30 130 30 130 30 130 30 130 30
+			>;
+
+		/* type, length, uuid, params */
+		fod_params =
+			"0", "16", "0x0901090C", "params_k8_100W", "params_k8_100W_mag", "params_k8_100W_mag_thick",
+			"0", "16", "0x09010305", "params_low_inductance_80w", "params_low_inductance_80w_mag", "params_low_inductance_80w_mag_thick",
+			"0", "16", "0x09010901", "params_l2_50W", "params_l2_50W_mag", "params_l2_50W_mag_thick",
+			"0", "16", "0x09010407", "params_white_stand_30W", "params_white_stand_30W_mag", "params_white_stand_30W_mag_thick",
+			"0", "16", "0x09010904", "params_k1_80W", "params_k1_80W_mag", "params_k1_80W_mag_thick",
+			"0", "16", "0x09010A01", "params_m2_50W", "params_m2_50W_mag", "params_m2_50W_mag_thick",
+			"0", "16", "0x0901010B", "params_j1s_55W", "params_j1s_55W_mag", "params_j1s_55W_mag_thick",
+			"0", "16", "0x01080205", "params_zimi_car_50W", "params_zimi_car_50W_mag", "params_zimi_car_50W_mag",
+			"0", "16", "0x09080207", "params_zimi_car_30W", "params_zimi_car_30W_mag", "params_zimi_car_30W_mag",
+			"0", "16", "0x09010907", "params_redmi_disc_30W", "params_redmi_disc_30W_mag", "params_redmi_disc_30W_mag_thick",
+			"0", "16", "0x09080108", "params_zimi_20W", "params_zimi_20W_mag", "params_zimi_20W_mag",
+			"0", "16", "0x09010506", "params_moving_20W", "params_moving_20W_mag", "params_moving_20W_mag",
+			"0", "16", "0x09010A07", "params_double_coil_30W", "params_double_coil_30W_mag", "params_double_coil_30W_mag_thick",
+			"0", "16", "0x06010101", "params_white_20W", "params_white_20W_mag", "params_white_20W_mag",
+			"0", "16", "0x0C090908", "params_multcoil_20W", "params_multcoil_20W_mag", "params_multcoil_20W_mag",
+			"0", "16", "0x06020801", "params_zimi_car_20W", "params_zimi_car_20W_mag", "params_zimi_car_20W_mag",
+			"0", "16", "0x09080607", "params_bluetooth_30W", "params_bluetooth_30W_mag", "params_bluetooth_30W_mag",
+			"0", "16", "0x07030801", "params_power_bank_30W", "params_power_bank_30W_mag", "params_power_bank_30W_mag_thick",
+			"0", "16", "0x02010203", "params_trx_rev_22P5W", "params_trx_rev_22P5W_mag", "params_trx_rev_22P5W_mag",
+			"0", "16", "0x09018B07", "params_magnet_30W_mag", "params_magnet_30W_mag", "params_magnet_30W_mag_thick",
+			"0", "16", "0x09058907", "params_magnet_2in1_30W_mag", "params_magnet_2in1_30W_mag", "params_magnet_2in1_30W_mag_thick",
+			"0", "16", "0x07030802", "params_black_vertical_30W_mag", "params_black_vertical_30W_mag", "params_black_vertical_30W_mag",
+			"0", "16", "0x0E018207", "params_magnet_black_car_30W_mag", "params_magnet_black_car_30W_mag", "params_magnet_black_car_30W_mag_thick",
+			"0", "16", "0x02010B03", "params_p11u_trx_rev_22P5W_mag", "params_p11u_trx_rev_22P5W_mag", "params_p11u_trx_rev_22P5W_mag",
+			"0", "16", "0x09018203", "params_black_fan_mag", "params_black_fan_mag", "params_black_fan_mag",
+			"0", "16", "0x09018207", "params_black_short_mike_mag", "params_black_short_mike_mag", "params_black_short_mike_mag",
+			"0", "16", "0x09058903", "params_magnet_bank", "params_magnet_bank", "params_magnet_bank",
+			"0", "16", "0x03010E01", "params_byd_car_50W", "params_byd_car_50W_mag", "params_byd_car_50W_mag",
+			"0", "16", "0x000021E1", "params_xinwei_car_50W", "params_xinwei_car_50W_mag", "params_xinwei_car_50W_mag",
+			"0", "16", "0x02040E01", "params_jzzn1_car_50W", "params_jzzn1_car_50W_mag", "params_jzzn1_car_50W_mag",
+			"0", "16", "0x020D0E01", "params_jm_electron_car_50W", "params_jm_electron_car_50W_mag", "params_jm_electron_car_50W_mag",
+			"0", "16", "0x020A0E01", "params_jzzn2_car_50W", "params_jzzn2_car_50W_mag", "params_jzzn2_car_50W_mag";
+		/* gain, offset */
+		params_k8_100W = /bits/ 8 <
+				150 30 150 28 150 20 150 20 150 20 150 25 138 18 135 18
+				134 18 134 20 134 20 134 20 134 20 134 20 134 20 134 20
+			>;
+		params_k8_100W_mag = /bits/ 8 <
+				150 60 150 60 150 60 150 20 150 20 150 40 140 18 135 18
+				135 20 138 20 137 20 134 30 134 30 134 20 136 20 136 20
+			>;
+		params_k8_100W_mag_thick = /bits/ 8 <
+				150 60 150 60 150 60 150 20 150 20 150 40 140 18 135 18
+				135 20 138 20 137 20 134 30 134 30 134 20 136 20 136 20
+			>;
+
+		params_low_inductance_80w = /bits/ 8 <
+				128 10 128 6 128 6 128 6 128 6 128 6 128 4 126 4
+				126 4 126 4 126 4 126 4 126 4 126 4 126 4 126 4
+			>;
+		params_low_inductance_80w_mag = /bits/ 8 <
+				124 10 124 6 124 6 124 6 124 6 124 6 124 4 122 4
+				122 4 122 4 122 4 122 4 122 4 123 4 123 4 123 4
+			>;
+		params_low_inductance_80w_mag_thick = /bits/ 8 <
+				124 10 124 6 124 6 124 6 124 6 124 6 116 4 116 4
+				116 4 116 4 118 4 118 4 120 4 120 4 120 4 120 4
+			>;
+
+		params_l2_50W = /bits/ 8 <
+				150 60 150 50 140 40 140 30 140 40 138 20 134 20 130 20
+				130 20 130 20 130 20 130 20 130 20 128 20 128 20 128 20
+			>;
+		params_l2_50W_mag = /bits/ 8 <
+				150 50 150 40 140 30 140 30 140 40 138 30 134 30 130 30
+				130 30 130 30 130 30 130 30 130 30 128 30 128 30 128 30
+			>;
+		params_l2_50W_mag_thick = /bits/ 8 <
+				150 50 150 40 140 30 140 30 140 40 138 30 134 30 130 30
+				130 30 130 30 130 30 130 30 130 30 128 30 128 30 128 30
+			>;
+
+		params_white_stand_30W = /bits/ 8 <
+				145 25 145 30 145 33 140 20 140 20 140 20 135 20 135 15
+				135 15 135 15 132 18 132 20 135 20 135 20 135 20 135 20
+			>;
+		params_white_stand_30W_mag = /bits/ 8 <
+				148 50 150 60 145 40 145 35 140 20 140 20 135 20 135 15
+				135 15 135 15 132 25 135 30 135 20 135 20 135 20 135 20
+			>;
+		params_white_stand_30W_mag_thick = /bits/ 8 <
+				152 60 158 60 145 45 145 40 140 30 140 20 135 20 135 15
+				135 15 135 15 132 25 135 30 135 20 135 20 135 20 135 20
+			>;
+
+		params_k1_80W = /bits/ 8 <
+				150 70 150 70 150 70 150 50 150 20 150 25 145 18 145 18
+				138 25 138 25 138 25 135 26 135 26 135 27 136 27 138 27
+			>;
+		params_k1_80W_mag = /bits/ 8 <
+				150 70 150 70 150 70 150 50 150 20 150 25 145 18 145 18
+				138 25 138 25 138 25 135 26 135 26 135 27 134 27 140 30
+			>;
+		params_k1_80W_mag_thick = /bits/ 8 <
+				150 100 150 70 150 70 150 50 150 20 150 25 145 18 145 18
+				138 25 138 25 138 25 135 26 138 26 140 27 150 40 140 30
+			>;
+
+		params_m2_50W = /bits/ 8 <
+				150 60 150 40 150 30 150 20 150 20 158 50 158 50 152 20
+				150 20 148 20 148 20 148 20 146 20 144 20 143 20 142 20
+			>;
+		params_m2_50W_mag = /bits/ 8 <
+				150 80 150 60 150 30 150 30 150 30 160 50 160 60 154 60
+				152 30 150 30 150 30 148 30 148 30 146 30 144 30 144 30
+			>;
+		params_m2_50W_mag_thick = /bits/ 8 <
+				150 80 150 60 150 30 150 30 150 30 160 60 160 80 154 60
+				152 60 150 40 150 30 148 30 148 30 146 30 144 30 144 30
+			>;
+
+		params_j1s_55W = /bits/ 8 <
+				150 60 150 50 140 40 140 30 140 40 138 20 134 20 130 20
+				130 20 130 20 130 20 130 20 130 20 128 20 128 20 128 20
+			>;
+		params_j1s_55W_mag = /bits/ 8 <
+				150 50 150 40 140 30 140 30 140 40 138 30 134 30 130 30
+				130 30 130 30 130 30 130 30 130 30 128 30 128 30 128 30
+			>;
+		params_j1s_55W_mag_thick = /bits/ 8 <
+				150 50 150 40 140 30 140 30 140 40 138 30 134 30 130 30
+				130 30 130 30 130 30 130 30 130 30 128 30 128 30 128 30
+			>;
+
+		params_zimi_car_50W = /bits/ 8 <
+				155 45 155 30 145 30 145 30 145 30 135 40 135 40 128 20
+				128 10 128 10 128 10 128 10 126 10 126 10 126 10 126 10
+			>;
+
+		params_zimi_car_50W_mag = /bits/ 8 <
+				120 25 120 10 120 15 120 20 102 19 111 25 123 25 123 30
+				129 15 124 20 126 20 126 20 112 40 112 40 112 40 112 40
+			>;
+
+		params_zimi_car_30W = /bits/ 8 <
+				128 40 127 34 127 34 127 34 126 34 125 38 125 38 124 41
+				124 43 123 40 126 36 126 36 128 40 128 40 128 40 128 40
+			>;
+
+		params_zimi_car_30W_mag = /bits/ 8 <
+				128 40 127 34 127 34 127 34 126 34 125 38 125 38 124 41
+				124 43 123 40 126 36 126 36 128 40 128 40 128 40 128 40
+			>;
+
+		params_redmi_disc_30W = /bits/ 8 <
+				140 50 140 30 140 30 140 20 130 20 130 20 130 20 130 20
+				130 20 130 20 130 20 130 20 130 20 130 20 130 20 130 20
+			>;
+		params_redmi_disc_30W_mag = /bits/ 8 <
+				140 50 140 30 140 30 140 20 130 20 130 20 130 20 130 20
+				130 20 130 20 130 20 130 20 130 20 130 20 130 20 130 20
+			>;
+		params_redmi_disc_30W_mag_thick = /bits/ 8 <
+				140 50 140 30 140 30 140 20 130 20 130 20 130 20 130 20
+				130 20 130 20 130 20 130 20 130 20 130 20 130 20 130 20
+			>;
+
+		params_zimi_20W = /bits/ 8 <
+				120 30 124 45 127 40 127 40 127 40 127 40 128 40 127 40
+				128 40 128 40 128 40 128 40 128 40 128 40 128 40 128 40
+			>;
+
+		params_zimi_20W_mag = /bits/ 8 <
+				120 30 124 45 127 40 127 40 127 40 127 40 128 40 127 40
+				128 40 128 40 128 40 128 40 128 40 128 40 128 40 128 40
+			>;
+
+		params_moving_20W = /bits/ 8 <
+				122 30 121 32 123 22 126 21 126 27 126 27 122 24 122 24
+				122 24 122 24 122 24 122 24 122 24 122 24 122 24 122 24
+			>;
+
+		params_moving_20W_mag = /bits/ 8 <
+				122 30 121 32 123 22 126 21 126 27 126 27 122 24 122 24
+				122 24 122 24 122 24 122 24 122 24 122 24 122 24 122 24
+			>;
+
+		params_double_coil_30W = /bits/ 8 <
+				145 20 145 15 145 10 135 10 130 10 135 10 140 20 138 15
+				135 25 135 30 135 30 135 30 140 20 140 20 140 20 140 20
+			>;
+		params_double_coil_30W_mag = /bits/ 8 <
+				145 25 145 15 145 10 135 20 130 15 135 15 140 20 138 25
+				135 25 135 30 135 30 135 30 140 20 140 20 140 20 140 20
+			>;
+		params_double_coil_30W_mag_thick = /bits/ 8 <
+				145 35 145 35 145 30 135 30 130 35 135 35 140 30 138 25
+				135 35 135 30 135 40 135 35 140 20 140 20 140 20 140 20
+			>;
+
+		params_power_bank_30W = /bits/ 8 <
+				150 60 150 50 150 40 150 30 150 20 140 10 140 20 140 20
+				140 20 140 20 140 20 145 20 145 20 145 20 145 20 145 20
+			>;
+		params_power_bank_30W_mag = /bits/ 8 <
+				150 80 150 70 150 60 150 50 150 40 140 20 140 20 140 20
+				140 20 140 20 140 20 145 20 145 20 145 20 145 20 145 20
+			>;
+		params_power_bank_30W_mag_thick = /bits/ 8 <
+				150 80 150 70 150 60 150 50 150 40 140 20 140 20 140 20
+				140 20 140 20 140 20 145 20 145 20 145 20 145 20 145 20
+			>;
+
+		params_white_20W = /bits/ 8 <
+				128 10 128 10 128 10 128 10 128 31 128 31 128 34 128 34
+				128 35 128 35 128 35 128 35 128 40 128 40 128 40 128 40
+			>;
+
+		params_white_20W_mag = /bits/ 8 <
+				128 10 128 10 128 10 128 10 128 31 128 31 128 34 128 34
+				128 35 128 35 128 35 128 35 128 40 128 40 128 40 128 40
+			>;
+
+		params_multcoil_20W = /bits/ 8 <
+				120 25 120 10 120 15 120 20 102 19 111 25 123 25 123 30
+				129 15 124 20 126 20 126 20 112 40 112 40 112 40 112 40
+			>;
+
+		params_multcoil_20W_mag = /bits/ 8 <
+				120 25 120 10 120 15 120 20 102 19 111 25 123 25 123 30
+				129 15 124 20 126 20 126 20 112 40 112 40 112 40 112 40
+			>;
+
+		params_zimi_car_20W = /bits/ 8 <
+				120 25 120 10 120 15 120 20 102 19 111 25 123 25 123 30
+				129 15 124 20 126 20 126 20 112 40 112 40 112 40 112 40
+			>;
+
+		params_zimi_car_20W_mag = /bits/ 8 <
+				120 25 120 10 120 15 120 20 102 19 111 25 123 25 123 30
+				129 15 124 20 126 20 126 20 112 40 112 40 112 40 112 40
+			>;
+
+		params_bluetooth_30W = /bits/ 8 <
+				128 32 138 40 128 38 125 37 125 33 126 40 144 2 129 40
+				153 215 149 222 149 215 127 40 128 60 128 60 128 60 128 60
+			>;
+
+		params_bluetooth_30W_mag = /bits/ 8 <
+				128 32 138 40 128 38 125 37 125 33 126 40 144 2 129 40
+				153 215 149 222 149 215 127 40 128 60 128 60 128 60 128 60
+			>;
+
+		params_trx_rev_22P5W = /bits/ 8 <
+				142 40 142 36 142 30 142 26 138 20 138 16 136 16 136 16
+				136 16 136 16 136 16 136 16 136 16 136 16 136 16 136 16
+			>;
+
+		params_trx_rev_22P5W_mag = /bits/ 8 <
+				142 40 142 36 142 30 142 26 138 20 138 16 136 16 136 16
+				136 16 136 16 136 16 136 16 136 16 136 16 136 16 136 16
+			>;
+
+		params_magnet_2in1_30W = /bits/ 8 <
+			130 16 130 16 130 16 130 10 130 10 130 10 132 10 134 10
+			134 10 134 10 134 10 134 10 134 10 134 10 134 10
+		>;
+
+		params_magnet_30W = /bits/ 8 <
+			122 2 122 2 123 2 124 2 130 2 131 2 131 2 132 2
+			132 2 132 2 132 2 132 2 132 2 132 2 132 2 132 2
+		>;
+
+		params_magnet_30W_mag = /bits/ 8 <
+				150 80 150 70 150 60 150 50 150 30 133 20 133 20 133 20
+				133 20 133 20 133 20 133 20 133 20 133 20 133 20 133 20
+			>;
+		params_magnet_30W_mag_thick = /bits/ 8 <
+				150 80 150 70 150 60 150 50 150 30 133 20 133 20 133 20
+				133 20 133 20 133 20 133 20 133 20 133 20 133 20 133 20
+			>;
+
+		params_magnet_2in1_30W_mag = /bits/ 8 <
+				150 45 140 20 135 15 130 15 130 18 130 18 130 18 132 20
+				130 20 135 25 135 20 135 20 135 20 129 20 129 20 129 20
+			>;
+		params_magnet_2in1_30W_mag_thick = /bits/ 8 <
+				150 45 140 20 135 15 130 15 130 18 130 18 130 18 132 20
+				130 20 135 25 135 20 135 20 135 20 129 20 129 20 129 20
+			>;
+
+		params_black_vertical_30W_mag = /bits/ 8 <
+				155 45 155 30 150 30 149 30 148 30 140 30 150 10 150 0
+				138 30 140 20 140 20 141 20 141 15 141 5 141 5 141 5
+			>;
+
+		params_magnet_black_car_30W_mag = /bits/ 8 <
+				150 40 150 40 150 40 150 10 150 10 150 20 150 10 145 10
+				145 10 145 10 145 10 145 10 140 10 140 10 140 10 140 10
+			>;
+		params_magnet_black_car_30W_mag_thick = /bits/ 8 <
+				150 10 150 40 150 40 150 10 150 10 150 20 150 10 150 10
+				150 10 150 10 150 10 150 10 148 10 150 10 150 10 150 10
+			>;
+
+		params_p11u_trx_rev_22P5W_mag = /bits/ 8 <
+				155 60 155 45 150 50 149 35 148 45 140 40 150 40 150 40
+				138 40 140 40 140 40 141 40 141 40 141 40 141 40 141 40
+			>;
+
+		params_black_fan_mag = /bits/ 8 <
+				155 60 155 45 150 50 149 35 148 45 140 40 150 40 150 40
+				138 40 140 40 140 40 141 40 141 40 141 40 141 40 141 40
+			>;
+
+		params_black_short_mike_mag = /bits/ 8 <
+				155 60 155 45 150 50 149 35 148 45 140 40 150 40 150 40
+				138 40 140 40 140 40 141 40 141 40 141 40 141 40 141 40
+			>;
+
+		params_magnet_bank = /bits/ 8 <
+				130 50 130 40 130 30 130 20 130 20 130 20 130 20 130 20
+				130 20 130 20 130 20 130 20 130 20 130 20 130 20 130 20
+			>;
+
+		params_byd_car_50W = /bits/ 8 <
+				155 45 155 30 150 30 149 30 148 30 253 127 253 127 253 127
+				253 127 253 127 253 127 253 127 253 127 253 127 253 127 253 127
+			>;
+
+		params_byd_car_50W_mag = /bits/ 8 <
+				155 45 155 30 150 30 149 30 148 30 253 127 253 127 253 127
+				253 127 253 127 253 127 253 127 253 127 253 127 253 127 253 127
+			>;
+
+		params_xinwei_car_50W = /bits/ 8 <
+				155 45 155 30 150 30 149 30 148 30 253 127 253 127 253 127
+				253 127 253 127 253 127 253 127 253 127 253 127 253 127 253 127
+			>;
+
+		params_xinwei_car_50W_mag = /bits/ 8 <
+				155 45 155 30 150 30 149 30 148 30 253 127 253 127 253 127
+				253 127 253 127 253 127 253 127 253 127 253 127 253 127 253 127
+			>;
+
+		params_jzzn1_car_50W = /bits/ 8 <
+				155 45 155 30 150 30 149 30 148 30 253 127 253 127 253 127
+				253 127 253 127 253 127 253 127 253 127 253 127 253 127 253 127
+			>;
+
+		params_jzzn1_car_50W_mag = /bits/ 8 <
+				155 45 155 30 150 30 149 30 148 30 253 127 253 127 253 127
+				253 127 253 127 253 127 253 127 253 127 253 127 253 127 253 127
+			>;
+
+		params_jm_electron_car_50W = /bits/ 8 <
+				155 45 155 30 150 30 149 30 148 30 253 127 253 127 253 127
+				253 127 253 127 253 127 253 127 253 127 253 127 253 127 253 127
+			>;
+
+		params_jm_electron_car_50W_mag = /bits/ 8 <
+				155 45 155 30 150 30 149 30 148 30 253 127 253 127 253 127
+				253 127 253 127 253 127 253 127 253 127 253 127 253 127 253 127
+			>;
+
+		params_jzzn2_car_50W = /bits/ 8 <
+				155 45 155 30 150 30 149 30 148 30 253 127 253 127 253 127
+				253 127 253 127 253 127 253 127 253 127 253 127 253 127 253 127
+			>;
+
+		params_jzzn2_car_50W_mag = /bits/ 8 <
+				155 45 155 30 150 30 149 30 148 30 253 127 253 127 253 127
+				253 127 253 127 253 127 253 127 253 127 253 127 253 127 253 127
+			>;
+	};
+};

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-2.0-only
-"""Compare OS4.0.7 Canoe audio/haptic wiring in final merged DTBs.
+"""Compare OS4.0.7 Nezha audio/haptic wiring in final merged DTBs.
 
 Usage: verify-nezha-audio.py STOCK_DTBO_ENTRY_1 FINAL_DTB [FINAL_DTB ...]
-Checks properties and resolved references, not driver binding or sound output.
+Use --sg-merged with a matched factory base plus its stock SG/Whale overlay.
 """
 import argparse
 from collections import defaultdict
@@ -45,11 +45,44 @@ def check(stock, final):
     return len(expected)
 
 
+def sg_properties(nodes):
+    handles = {v['phandle']: path for path, v in nodes.items() if 'phandle' in v}
+    haptic, = [p for p in nodes if p.endswith('/qcom,hv-haptics@f000')]
+    sound = '/soc/spf_core_platform/sound'
+    if sound not in nodes:
+        raise ValueError('missing sound card')
+    result = {}
+    for p, props in nodes.items():
+        if not any(p == n or p.startswith(n + '/') for n in (haptic, sound)):
+            continue
+        for k, value in props.items():
+            if k in ('phandle', 'linux,phandle'):
+                continue
+            if k in ('clocks', 'nvmem'):
+                value = (handles[value[:4]], value[4:])
+            result[p, k] = value
+    return result
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--sg-merged', action='store_true', help='compare against a matching merged factory SG/Whale DTB')
     p.add_argument('stock',type=Path);p.add_argument('final',nargs='+',type=Path)
     args=p.parse_args()
     helper=runpy.run_path(str(Path(__file__).with_name('prepare-nezha-display.py')))
+    if args.sg_merged:
+        ref = helper['read_nodes'](args.stock.read_bytes())
+        expected = sg_properties(ref)
+        for path in args.final:
+            tree = helper['read_nodes'](path.read_bytes())
+            if ref['/']['qcom,msm-id'] != tree['/']['qcom,msm-id']:
+                raise ValueError(f'{path}: factory SoC ID mismatch')
+            actual = sg_properties(tree)
+            for key in actual.keys() | expected.keys():
+                if expected.get(key) != actual.get(key):
+                    raise ValueError(f'{path}: SG audio/haptic mismatch at {key}')
+            print(f'PASS {path.name}: {len(actual)} SG audio/haptic properties and references')
+        return
     stock=helper['BoardOverlay'](args.stock.read_bytes())
     for path in args.final:
         count=check(stock,helper['read_nodes'](path.read_bytes()))

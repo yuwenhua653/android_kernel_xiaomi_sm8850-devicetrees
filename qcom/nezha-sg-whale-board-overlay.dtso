@@ -2,6 +2,31 @@
 #include "nezha-sg-whale-input-overlay.dtso"
 #include "nezha-sm8850-regulator.dtsi"
 #include "nezha-charger-common.dtsi"
+#include "audio/canoe-audio.dtsi"
+#include "audio/canoe-lpi.dtsi"
+
+/* The smaller OS4 board entry uses the PMIH010x default waveforms and
+ * PMK8850 SDAM46 for its haptic calibration.
+ */
+&spmi0_bus {
+	pmk8850@0 {
+		nezha_sg_hap_sdam: sdam@9d00 {
+			compatible = "qcom,spmi-sdam";
+			reg = <0x9d00>;
+		};
+	};
+};
+
+&spmi1_bus {
+	#address-cells = <2>;
+	#size-cells = <0>;
+	#include "pmih010x.dtsi"
+};
+
+&pmih010x_haptics {
+	nvmem = <&nezha_sg_hap_sdam>;
+	nvmem-names = "hap_cfg_sdam";
+};
 
 &spmi0_bus {
 	#address-cells = <2>;
