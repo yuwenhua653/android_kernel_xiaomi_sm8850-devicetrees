@@ -1,59 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /* Xiaomi 17 Ultra satellite modem wiring. */
 
-&spmi0_bus {
-	#address-cells = <2>;
-	#size-cells = <0>;
-
-	pmk8850@0 {
-		compatible = "qcom,spmi-pmic";
-		reg = <0 0>;
-		#address-cells = <1>;
-		#size-cells = <0>;
-
-		pmk8850_gpios: pinctrl@b800 {
-			compatible = "qcom,pmk8850-gpio";
-			reg = <0xb800>;
-			gpio-controller;
-			#gpio-cells = <2>;
-			interrupt-controller;
-			#interrupt-cells = <2>;
-		};
-	};
-
-	pmh0101@1 {
-		compatible = "qcom,spmi-pmic";
-		reg = <1 0>;
-		#address-cells = <1>;
-		#size-cells = <0>;
-
-		pmh0101_gpios: pinctrl@8800 {
-			compatible = "qcom,pmh0101-gpio";
-			reg = <0x8800>;
-			gpio-controller;
-			#gpio-cells = <2>;
-			interrupt-controller;
-			#interrupt-cells = <2>;
-		};
-	};
-
-	pmh0110@8 {
-		compatible = "qcom,spmi-pmic";
-		reg = <8 0>;
-		#address-cells = <1>;
-		#size-cells = <0>;
-
-		pmh0110_i_gpios: pinctrl@8800 {
-			compatible = "qcom,pmh0110-gpio";
-			reg = <0x8800>;
-			gpio-controller;
-			#gpio-cells = <2>;
-			interrupt-controller;
-			#interrupt-cells = <2>;
-		};
-	};
-};
-
 &pmk8850_gpios {
 	pmk8850_gpio1_dig_out {
 		pmk8850_gpio1_dig_out_default: pmk8850_gpio1_dig_out_default {

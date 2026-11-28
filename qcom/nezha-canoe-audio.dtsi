@@ -3,22 +3,13 @@
 #include "audio/canoe-audio.dtsi"
 #include "audio/canoe-lpi.dtsi"
 
-&spmi0_bus {
-	pmk8850@0 {
-		pmk8850_sdam_46: sdam@9d00 {
-			compatible = "qcom,spmi-sdam";
-			reg = <40192>;
-		};
-	};
-};
-
 &spmi1_bus {
 	qcom,pmih010x@7 {
 		compatible = "qcom,spmi-pmic";
 		reg = <7 0>;
 		#address-cells = <1>;
 		#size-cells = <0>;
-		pmih010x_haptics: qcom,hv-haptics@f000 {
+		qcom,hv-haptics@f000 {
 			qcom,lra-f0-cal-count = <570>;
 			qcom,lra-f0-default = <170>;
 			qcom,lra-f0-max = <180>;
@@ -43,7 +34,7 @@
 			qcom,rt-imp-detect;
 			nvmem-names = "hap_cfg_sdam";
 			nvmem = <&pmk8850_sdam_46>;
-			hap_swr_slave_reg: qcom,hap-swr-slave-reg {
+			qcom,hap-swr-slave-reg {
 				regulator-name = "hap-swr-slave-reg";
 			};
 			effect_0 {

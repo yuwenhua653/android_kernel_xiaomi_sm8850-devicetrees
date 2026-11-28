@@ -1,0 +1,156 @@
+// SPDX-License-Identifier: BSD-3-Clause
+/* Nezha OS4.0.7 board. The shared MTP layer supplies UFS, PON, RTC and UCSI. */
+#define NEZHA_BOARD_PMIC
+#include "canoe-mtp.dtsi"
+
+&soc {
+	gpio_keys {
+		vol_up {
+			debounce-interval = <32>;
+		};
+	};
+};
+
+&qupv3_se0_spi {
+	status = "ok";
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&qupv3_se0_spi_mosi_active>, <&ls_gpio_active>;
+	pinctrl-1 = <&qupv3_se0_spi_sleep>, <&ls_gpio_sleep>;
+	ir-spi@0 {
+		compatible = "ir-spi";
+		reg = <0>;
+		spi-max-frequency = <19200000>;
+		status = "ok";
+	};
+};
+
+&tlmm {
+	qupv3_se0_spi_mosi_active: qupv3_se0_spi_mosi_active {
+		mux {
+			pins = "gpio83";
+			function = "qup1_se0_l1";
+		};
+
+		config {
+			pins = "gpio83";
+			drive-strength = <6>;
+			bias-disable;
+		};
+	};
+
+	qupv3_se0_spi_sleep: qupv3_se0_spi_sleep {
+		mux {
+			pins = "gpio83";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio83";
+			drive-strength = <2>;
+			bias-disable;
+		};
+	};
+
+	ls_gpio_active: ls_gpio_active {
+		mux {
+			pins = "gpio159";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio159";
+			drive-strength = <2>;
+			bias-disable;
+			output-high;
+		};
+	};
+
+	ls_gpio_sleep: ls_gpio_sleep {
+		mux {
+			pins = "gpio159";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio159";
+			drive-strength = <2>;
+			bias-disable;
+			output-high;
+		};
+	};
+};
+
+&usb0 {
+	qcom,wcd_usbss = <&wcd_usbss>;
+	wcd_equ = <0xF8>;
+	wcd_equ_host = <0xC0>;
+};
+
+&wcd_usbss {
+	wcd-usb-sbu-compliance;
+};
+
+&pmih010x_eusb2_repeater {
+	qcom,host-param-override-seq =
+		<0x00 0x50
+		0x0E 0x51
+		0x04 0x52
+		0x07 0x53
+		0x05 0x54
+		0x03 0x55
+		0x03 0x56
+		0x03 0x57
+		0x02 0x58
+		0x03 0x59
+		0x03 0x5a
+		0x02 0x5b>;
+	qcom,param-override-seq =
+		<0x00 0x50
+		0x0E 0x51
+		0x01 0x52
+		0x07 0x53
+		0x03 0x54
+		0x00 0x55
+		0x00 0x56
+		0x06 0x57
+		0x02 0x58
+		0x03 0x59
+		0x01 0x5a
+		0x02 0x5b>;
+};
+
+&usb_qmp_dp_phy {
+	usb3,eyegram-tuning;
+	qcom,usb3-phy-eye-seq =
+	/* <reg_offset, value>*/
+		<USB3_DP_PCS_G12S1_TXMGN_V0 0x1F
+			USB3_DP_PCS_G12S1_TXDEEMPH_M3P5DB 0x17>;
+	qcom,host-usb3-phy-eye-seq =
+		<USB3_DP_PCS_G12S1_TXMGN_V0 0x1F
+			USB3_DP_PCS_G12S1_TXDEEMPH_M3P5DB 0x16>;
+};
+
+#include "nezha-thermal.dtsi"
+
+&eusb2_phy0 {
+	vdd_refgen-supply = <&L3D>;
+};
+
+&dwc3_0 {
+	snps,dis_u3_susphy_quirk;
+};
+
+&msm_gpu {
+	reg = <0 0x3d00000 0 0x40000>, <0 0x3d50000 0 0x10000>,
+	      <0 0x3d61000 0 0x3000>, <0 0x3d9e000 0 0x2000>,
+	      <0 0x11100000 0 0x80000>, <0 0x10048000 0 0x8000>,
+	      <0 0x11305000 0 0x1000>;
+	reg-names = "kgsl_3d0_reg_memory", "rscc", "cx_dbgc", "cx_misc",
+		    "qdss_gfx", "qdss_etr", "qdss_tmc";
+	nvmem-cells = <&gpu_debug_bus_bin>, <&gpu_speed_bin>, <&cpr_gfx_rc>;
+	nvmem-cell-names = "gpu_debug_bus_bin", "speed_bin", "cpr_rev";
+};
+
+&non_secure_cb_group {
+	qcom,iommu-faults = "non-fatal";
+};

@@ -75,6 +75,32 @@
 	};
 };
 
+&L1F {
+	regulator-min-microvolt = <1800000>;
+	regulator-max-microvolt = <1800000>;
+	qcom,init-voltage = <1800000>;
+};
+
+&L16B {
+	regulator-min-microvolt = <3300000>;
+	regulator-max-microvolt = <3300000>;
+	qcom,init-voltage = <3300000>;
+};
+
+&L18B {
+	regulator-min-microvolt = <1200000>;
+	regulator-max-microvolt = <1200000>;
+	qcom,init-voltage = <1200000>;
+};
+
+&qupv3_se14_i2c {
+	status = "disabled";
+};
+
+&i3c3 {
+	status = "disabled";
+};
+
 &qupv3_se14_spi {
 	#address-cells = <1>;
 	#size-cells = <0>;
@@ -85,6 +111,7 @@
 
 	stmvl53l5@0 {
 		compatible = "st,stmvl53l5";
+		status = "okay";
 		reg = <0>;
 		spi-max-frequency = <3000000>;
 		_1P8_power-supply = <&pmh0110_f_l1>;

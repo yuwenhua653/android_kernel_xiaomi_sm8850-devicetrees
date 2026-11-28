@@ -10,29 +10,6 @@
 	power-domain-names = "gdsc-phy-vdd";
 };
 
-&spmi0_bus {
-	pmk8850@0 {
-		sdam@7100 {
-			compatible = "qcom,spmi-sdam";
-			reg = <28928>;
-			#address-cells = <1>;
-			#size-cells = <1>;
-			xo_calib_data: xo_calib-data@59 {
-				reg = <89 1>;
-			};
-			fmd_set: fmd-set@9a {
-				reg = <154 1>;
-			};
-			fmd_chg_pon: fmd-chg-pon@9f {
-				reg = <159 1>;
-			};
-			fmd_cnt2_stop: fmd-cnt2-stop@a2 {
-				reg = <162 1>;
-			};
-		};
-	};
-};
-
 &pmh0104_gpios {
 	bt_en: bt_en {
 		power-source = <1>;

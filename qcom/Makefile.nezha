@@ -5,11 +5,36 @@ dtb-y += canoep-sg-v2.dtb canoep-sg.dtb
 dtb-y += canoep-tp-v2.dtb canoep-tp.dtb canoep-v2.dtb canoep.dtb
 dtb-y += whale.dtb whalep.dtb
 
-# Input and NFC components. Final stock overlays also contain other subsystems.
-dtb-y += nezha-sg-whale-input-overlay.dtbo nezha-canoe-input-overlay.dtbo
+# Keep the factory base filenames and table order. Kbuild combines each raw SoC
+# with the layers selected by the OS4 msm-id before Android packs vendor_boot.
+# Only the two board overlays go in the device's dtbo table.
+$(obj)/nezha-soc-base/%.dtb: $(src)/%.dts $(objtree)/scripts/dtc/dtc FORCE
+	$(Q)mkdir -p $(dir $@)
+	$(call if_changed_dep,dtc)
 
-# SoC display and its HFI / fence suppliers for the matching raw Canoe bases.
-dtb-y += mm/hfi_core/canoe-hfi-core.dtbo mm/hw_fence/canoe-hw-fence.dtbo
-dtb-y += synx/synx/canoe-synx.dtbo nezha-canoe-display-soc.dtbo
-dtb-y += nezha-canoe-board-overlay.dtbo
-dtb-y += nezha-sg-whale-board-overlay.dtbo
+nezha_canoe_display := mm/hfi_core/canoe-hfi-core.dtbo mm/hw_fence/canoe-hw-fence.dtbo \
+	synx/synx/canoe-synx.dtbo nezha-canoe-display-soc.dtbo
+nezha_ipa := nezha-canoe-ipa.dtbo data/canoe-smem-mailbox.dtbo
+nezha_video_v1 := dsp/canoe/canoe-dsp.dtbo video/canoe-vidc.dtbo
+nezha_video_v2 := dsp/canoe/canoe-dsp_v2.dtbo video/canoe-vidc-v2.dtbo
+nezha_mm := eva/canoe-eva.dtbo mmrm/canoe/canoe-mmrm.dtbo
+nezha_canoe_v1 := $(nezha_mm) $(nezha_video_v1) graphics/gpu/canoe-gpu.dtbo $(nezha_canoe_display)
+nezha_canoe_v2 := $(nezha_mm) $(nezha_video_v2) graphics/gpu/canoe-v2-gpu.dtbo $(nezha_canoe_display)
+nezha_canoe_modem := $(nezha_ipa) fingerprint/canoe-fingerprint.dtbo
+nezha_whale := eva/canoe-eva.dtbo mmrm/canoe/canoe-alana-mmrm.dtbo dsp/canoe/canoe-dsp_v2.dtbo \
+	video/canoe-vidc-v3.dtbo graphics/gpu/whale-gpu.dtbo
+
+canoe-dtbs := nezha-soc-base/canoe.dtb $(nezha_canoe_v1) $(nezha_canoe_modem)
+canoe-v2-dtbs := nezha-soc-base/canoe-v2.dtb $(nezha_canoe_v2) $(nezha_canoe_modem)
+canoe-tp-dtbs := nezha-soc-base/canoe-tp.dtb $(nezha_canoe_v1) $(nezha_canoe_modem)
+canoe-tp-v2-dtbs := nezha-soc-base/canoe-tp-v2.dtb $(nezha_canoe_v2) $(nezha_canoe_modem)
+canoep-dtbs := nezha-soc-base/canoep.dtb $(nezha_canoe_v1)
+canoep-v2-dtbs := nezha-soc-base/canoep-v2.dtb $(nezha_canoe_v2)
+canoep-sg-dtbs := nezha-soc-base/canoep-sg.dtb $(nezha_mm) dsp/canoe/canoe-dsp.dtbo \
+	video/canoe-vidc-v2.dtbo graphics/gpu/canoep-sg-gpu.dtbo
+canoep-sg-v2-dtbs := nezha-soc-base/canoep-sg-v2.dtb $(nezha_mm) $(nezha_video_v2) \
+	graphics/gpu/canoep-sg-v2-gpu.dtbo
+whale-dtbs := nezha-soc-base/whale.dtb $(nezha_whale) $(nezha_ipa)
+whalep-dtbs := nezha-soc-base/whalep.dtb $(nezha_whale)
+
+dtb-y += nezha-sg-whale-board-overlay.dtbo nezha-canoe-board-overlay.dtbo

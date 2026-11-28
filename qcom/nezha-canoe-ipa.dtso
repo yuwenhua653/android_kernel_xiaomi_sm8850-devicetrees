@@ -1,0 +1,7 @@
+// SPDX-License-Identifier: GPL-2.0-only
+#include "data/canoe-ipa.dts"
+
+&ipa_hw {
+	qcom,ipa-uc-holb-monitor;
+	qcom,svs2 = <0 0 0 1300000 0 76800>;
+};
